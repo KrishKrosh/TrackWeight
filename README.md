@@ -36,7 +36,7 @@ The key insight is that trackpad pressure events are only generated when there's
 brew install --cask krishkrosh/apps/trackweight
 ```
 2. Run
-```
+```bash
 trackweight
 ```
 

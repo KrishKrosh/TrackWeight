@@ -77,33 +77,57 @@ struct ScaleView: View {
                                     .foregroundStyle(.gray)
                             }
                             
-                            Button(action: {
-                                viewModel.zeroScale()
-                            }) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: "arrow.clockwise")
-                                        .font(.system(size: min(max(geometry.size.width * 0.02, 14), 18), weight: .semibold))
-                                    Text("Zero Scale")
-                                        .font(.system(size: min(max(geometry.size.width * 0.02, 14), 18), weight: .semibold))
-                                }
-                                .foregroundStyle(.white)
-                                .frame(width: min(max(geometry.size.width * 0.2, 140), 180), 
-                                       height: min(max(geometry.size.height * 0.08, 40), 55))
-                                .background(
-                                    RoundedRectangle(cornerRadius: 25)
-                                        .fill(
-                                            LinearGradient(
-                                                colors: [.blue, .teal],
-                                                startPoint: .leading,
-                                                endPoint: .trailing
+                            HStack(spacing: 10) {
+                                Button(action: {
+                                    viewModel.zeroScale()
+                                }) {
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "arrow.clockwise")
+                                            .font(.system(size: min(max(geometry.size.width * 0.02, 14), 18), weight: .semibold))
+                                        Text("Zero Scale")
+                                            .font(.system(size: min(max(geometry.size.width * 0.02, 14), 18), weight: .semibold))
+                                    }
+                                    .foregroundStyle(.white)
+                                    .frame(width: min(max(geometry.size.width * 0.2, 140), 180), 
+                                           height: min(max(geometry.size.height * 0.08, 40), 55))
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 25)
+                                            .fill(
+                                                LinearGradient(
+                                                    colors: [.blue, .teal],
+                                                    startPoint: .leading,
+                                                    endPoint: .trailing
+                                                )
                                             )
-                                        )
-                                )
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                                .opacity(viewModel.hasTouch ? 1 : 0)
+                                .scaleEffect(viewModel.hasTouch ? 1 : 0.8)
+                                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.hasTouch)
+                                
+                                // Reset calibration button - always visible
+                                Button(action: {
+                                    viewModel.resetCalibration()
+                                }) {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "xmark.circle")
+                                            .font(.system(size: min(max(geometry.size.width * 0.018, 12), 16), weight: .medium))
+                                        Text("Reset")
+                                            .font(.system(size: min(max(geometry.size.width * 0.018, 12), 16), weight: .medium))
+                                    }
+                                    .foregroundStyle(.red)
+                                    .frame(width: min(max(geometry.size.width * 0.12, 80), 100), 
+                                           height: min(max(geometry.size.height * 0.06, 30), 40))
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(.red.opacity(0.5), lineWidth: 1.5)
+                                    )
+                                }
+                                .buttonStyle(.plain)
+                                .opacity(viewModel.zeroOffset != 0 ? 0.7 : 0.3)
+                                .disabled(viewModel.zeroOffset == 0)
                             }
-                            .buttonStyle(.plain)
-                            .opacity(viewModel.hasTouch ? 1 : 0)
-                            .scaleEffect(viewModel.hasTouch ? 1 : 0.8)
-                            .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.hasTouch)
                         }
                         .frame(height: min(max(geometry.size.height * 0.15, 80), 100)) // Fixed space for button + instruction
                         .frame(maxWidth: .infinity) // Ensure full width for centering

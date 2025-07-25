@@ -19,6 +19,7 @@
 		77292AA22B931E04001CA3F6 /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77292AA32B931E04001CA3F6 /* DebugView.swift */; };
 		77292AA42B931E05001CA3F6 /* ScaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77292AA52B931E05001CA3F6 /* ScaleView.swift */; };
 		77292AA62B931E06001CA3F6 /* ScaleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77292AA72B931E06001CA3F6 /* ScaleViewModel.swift */; };
+		93A095122E33359600E1E1D1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93A095112E33359600E1E1D1 /* SettingsView.swift */; };
 		93ABD0212E2E01E200668D4F /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93ABD0202E2E01E200668D4F /* HomeView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		77292AA32B931E04001CA3F6 /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		77292AA52B931E05001CA3F6 /* ScaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleView.swift; sourceTree = "<group>"; };
 		77292AA72B931E06001CA3F6 /* ScaleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleViewModel.swift; sourceTree = "<group>"; };
+		93A095112E33359600E1E1D1 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		93ABD0202E2E01E200668D4F /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,6 +83,7 @@
 				77292A9D2B931E01001CA3F6 /* WeighingState.swift */,
 				93ABD0202E2E01E200668D4F /* HomeView.swift */,
 				77292A9F2B931E02001CA3F6 /* WeighingViewModel.swift */,
+				93A095112E33359600E1E1D1 /* SettingsView.swift */,
 				77292AA12B931E03001CA3F6 /* TrackWeightView.swift */,
 				77292AA32B931E04001CA3F6 /* DebugView.swift */,
 				77292AA52B931E05001CA3F6 /* ScaleView.swift */,
@@ -188,6 +191,7 @@
 				77292AA22B931E04001CA3F6 /* DebugView.swift in Sources */,
 				77292AA42B931E05001CA3F6 /* ScaleView.swift in Sources */,
 				77292AA62B931E06001CA3F6 /* ScaleViewModel.swift in Sources */,
+				93A095122E33359600E1E1D1 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

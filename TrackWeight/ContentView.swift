@@ -31,10 +31,10 @@ struct ContentView: View {
                     }
                     .tag(1)
                 
-                DebugView()
+                SettingsView()
                     .tabItem {
-                        Image(systemName: "hand.point.up.left")
-                        Text("Debug")
+                        Image(systemName: "gearshape")
+                        Text("Settings")
                     }
                     .tag(2)
             }

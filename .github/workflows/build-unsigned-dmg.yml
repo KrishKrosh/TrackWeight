@@ -57,15 +57,21 @@ jobs:
         <plist version="1.0">
         <dict>
             <key>method</key>
-            <string>development</string>
+            <string>debugging</string>
             <key>signingStyle</key>
-            <string>automatic</string>
+            <string>manual</string>
             <key>stripSwiftSymbols</key>
             <true/>
             <key>destination</key>
             <string>export</string>
             <key>signingCertificate</key>
             <string>-</string>
+            <key>teamID</key>
+            <string>-</string>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <false/>
         </dict>
         </plist>
         EOF
@@ -74,7 +80,6 @@ jobs:
           -archivePath "$RUNNER_TEMP/${{ env.APP_NAME }}.xcarchive" \
           -exportPath "$RUNNER_TEMP/export" \
           -exportOptionsPlist "$RUNNER_TEMP/UnsignedExportOptions.plist" \
-          -allowProvisioningUpdates \
           -exportArchive
     
     - name: Install create-dmg

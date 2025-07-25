@@ -1,0 +1,228 @@
+name: Build and Sign DMG
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - 'copilot/fix-1'  # Enable testing on current working branch
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a GitHub release'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  APP_NAME: TrackWeight
+  SCHEME: TrackWeight
+  CONFIGURATION: Release
+
+jobs:
+  build-and-sign:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+    
+    - name: Import Code-Signing Certificates
+      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      uses: Apple-Actions/import-codesign-certs@v2
+      with:
+        p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+        p12-password: ${{ secrets.P12_PASSWORD }}
+    
+    - name: Install provisioning profile
+      if: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 != '' }}
+      env:
+        BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
+      run: |
+        PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+        echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PP_PATH
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+    
+    - name: Build and Archive App
+      run: |
+        xcodebuild \
+          -project TrackWeight.xcodeproj \
+          -scheme ${{ env.SCHEME }} \
+          -configuration ${{ env.CONFIGURATION }} \
+          -archivePath "$RUNNER_TEMP/${{ env.APP_NAME }}.xcarchive" \
+          archive
+    
+    - name: Export App
+      run: |
+        # Use development export method if no signing certificates are available
+        if [ -z "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" ]; then
+          # Create export options for unsigned build
+          cat > "$RUNNER_TEMP/ExportOptions.plist" << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>method</key>
+            <string>debugging</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>destination</key>
+            <string>export</string>
+            <key>signingCertificate</key>
+            <string>-</string>
+            <key>teamID</key>
+            <string>-</string>
+            <key>uploadBitcode</key>
+            <false/>
+            <key>uploadSymbols</key>
+            <false/>
+        </dict>
+        </plist>
+        EOF
+        else
+          # Use the existing ExportOptions.plist for signed builds
+          cp ExportOptions.plist "$RUNNER_TEMP/ExportOptions.plist"
+        fi
+        
+        xcodebuild \
+          -archivePath "$RUNNER_TEMP/${{ env.APP_NAME }}.xcarchive" \
+          -exportPath "$RUNNER_TEMP/export" \
+          -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+          -exportArchive
+    
+    - name: Install create-dmg
+      run: |
+        brew install create-dmg
+    
+    - name: Create README file
+      run: |
+        # Create a README with attribution
+        cat > "$RUNNER_TEMP/export/README.txt" << 'EOF'
+        TrackWeight - MacBook Trackpad Digital Scale
+        
+        This application transforms your MacBook's trackpad into a precise digital weighing scale.
+        
+        CREDITS:
+        Original repository: https://github.com/KrishKrosh/TrackWeight
+        Created by: Krish Shah (@KrishKrosh)
+        
+        This build was created from a fork at: https://github.com/Rohithzr/TrackWeight
+        
+        USAGE:
+        1. Open the scale
+        2. Rest your finger on the trackpad
+        3. While maintaining finger contact, put your object on the trackpad
+        4. Try to put as little pressure on the trackpad while still maintaining contact
+        
+        REQUIREMENTS:
+        - macOS 13.0 or later
+        - MacBook with Force Touch trackpad (2015 or newer MacBook Pro, 2016 or newer MacBook)
+        - App Sandbox must be disabled for trackpad access
+        
+        LICENSE: MIT License
+        
+        For more information, visit the original repository:
+        https://github.com/KrishKrosh/TrackWeight
+        EOF
+    
+    - name: Create DMG
+      run: |
+        # Create DMG with proper attribution to original repository
+        create-dmg \
+          --volname "${{ env.APP_NAME }}" \
+          --volicon "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Resources/AppIcon.icns" \
+          --window-pos 200 120 \
+          --window-size 600 300 \
+          --icon-size 100 \
+          --icon "${{ env.APP_NAME }}.app" 175 120 \
+          --hide-extension "${{ env.APP_NAME }}.app" \
+          --app-drop-link 425 120 \
+          --hdiutil-quiet \
+          "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" \
+          "$RUNNER_TEMP/export/"
+    
+    - name: Get version info
+      id: version_info
+      run: |
+        if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/}
+        else
+          VERSION=$(date +%Y%m%d-%H%M%S)
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "dmg_name=${{ env.APP_NAME }}-$VERSION.dmg" >> $GITHUB_OUTPUT
+    
+    - name: Rename DMG with version
+      run: |
+        mv "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" "$RUNNER_TEMP/${{ steps.version_info.outputs.dmg_name }}"
+    
+    - name: Upload DMG as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.version_info.outputs.dmg_name }}
+        path: ${{ runner.temp }}/${{ steps.version_info.outputs.dmg_name }}
+        retention-days: 30
+    
+    - name: Create Release
+      if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && github.event.inputs.create_release == 'true')
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version_info.outputs.version }}
+        name: ${{ env.APP_NAME }} ${{ steps.version_info.outputs.version }}
+        body: |
+          # TrackWeight ${{ steps.version_info.outputs.version }}
+          
+          Transform your MacBook's trackpad into a precise digital weighing scale!
+          
+          ## Credits
+          **Original repository:** https://github.com/KrishKrosh/TrackWeight  
+          **Created by:** Krish Shah (@KrishKrosh)
+          
+          This build is from the fork at https://github.com/Rohithzr/TrackWeight
+          
+          ## Installation
+          1. Download the DMG file below
+          2. Open the DMG and drag TrackWeight.app to your Applications folder
+          3. Run the app and follow the setup instructions
+          
+          ## Requirements
+          - macOS 13.0 or later
+          - MacBook with Force Touch trackpad (2015 or newer MacBook Pro, 2016 or newer MacBook)
+          
+          ## Usage
+          1. Open the scale
+          2. Rest your finger on the trackpad
+          3. While maintaining finger contact, put your object on the trackpad
+          4. Apply minimal pressure while maintaining contact to get the weight
+          
+          For more information, visit the [original repository](https://github.com/KrishKrosh/TrackWeight).
+        files: |
+          ${{ runner.temp }}/${{ steps.version_info.outputs.dmg_name }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Summary
+      run: |
+        echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Successfully built and packaged TrackWeight DMG" >> $GITHUB_STEP_SUMMARY
+        echo "📦 DMG file: ${{ steps.version_info.outputs.dmg_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "🔗 Original repository: https://github.com/KrishKrosh/TrackWeight" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "The DMG includes:" >> $GITHUB_STEP_SUMMARY
+        echo "- TrackWeight.app (signed if certificates provided)" >> $GITHUB_STEP_SUMMARY
+        echo "- README.txt with attribution and usage instructions" >> $GITHUB_STEP_SUMMARY
+        echo "- Proper credits to the original repository" >> $GITHUB_STEP_SUMMARY

@@ -35,12 +35,31 @@ The key insight is that trackpad pressure events are only generated when there's
 brew install --cask krishkrosh/apps/trackweight
 ```
 
-### Option 2: Build from Source
+### Option 2: Download DMG
+
+1. Go to the [Releases](https://github.com/Rohithzr/TrackWeight/releases) page
+2. Download the latest TrackWeight DMG file
+3. Open the DMG and drag TrackWeight.app to your Applications folder
+4. Run the application (you may need to allow it in System Preferences > Security & Privacy for unsigned builds)
+
+### Option 3: Build from Source
 
 1. Clone this repository
 2. Open `TrackWeight.xcodeproj` in Xcode
 3. Disable App Sandbox in the project settings (required for trackpad access)
 4. Build and run the application
+
+## Automated Builds
+
+This repository includes a GitHub Actions workflow that automatically builds and packages the application into a signed DMG file. The workflow:
+
+- Builds the Xcode project using the latest stable Xcode
+- Signs the application (if signing certificates are configured)
+- Creates a professional DMG with proper attribution
+- Uploads the DMG as a release artifact
+- Creates GitHub releases for tagged versions
+
+For more information about setting up the build pipeline, see [.github/workflows/README.md](.github/workflows/README.md).
 
 ### Calibration Process
 
@@ -73,6 +92,15 @@ This project relies heavily on the excellent work by **Takuto Nakamura** ([@Kyom
 - Detailed touch data including position, pressure, angle, and density
 - Thread-safe async/await support for touch event streams
 - Touch state tracking and comprehensive sensor data
+
+## Credits and Attribution
+
+**🙏 Full credit goes to the original TrackWeight project:**
+- **Original Repository**: https://github.com/KrishKrosh/TrackWeight
+- **Creator**: Krish Shah ([@KrishKrosh](https://github.com/KrishKrosh))
+- **Original Tweet**: https://x.com/KrishRShah/status/1947186835811193330
+
+This repository is a fork that adds automated DMG build and signing pipelines to make distribution easier. All core functionality and the brilliant idea of using trackpad sensors for weighing comes from the original project.
 
 ## License
 

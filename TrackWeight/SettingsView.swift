@@ -15,10 +15,6 @@ struct SettingsView: View {
             VStack(spacing: 0) {
                 // Header
                 VStack(spacing: 8) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 60))
-                        .foregroundColor(.blue)
-                    
                     Text("Settings")
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -29,11 +25,11 @@ struct SettingsView: View {
                 // Settings Content
                 VStack(spacing: 30) {
                     // Device Settings Section
-                    SettingsSection(title: "Device", icon: "trackpad") {
+                    SettingsSection(title: "Device") {
                         VStack(alignment: .leading, spacing: 16) {
                             if !viewModel.availableDevices.isEmpty {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("Trackpad Device")
+                                    Text("Trackpad")
                                         .font(.headline)
                                         .foregroundColor(.primary)
                                     
@@ -41,7 +37,7 @@ struct SettingsView: View {
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     
-                                    Picker("Device", selection: Binding(
+                                    Picker("", selection: Binding(
                                         get: { viewModel.selectedDevice },
                                         set: { device in
                                             if let device = device {
@@ -59,9 +55,9 @@ struct SettingsView: View {
                                 }
                             } else {
                                 VStack(alignment: .leading, spacing: 8) {
-                                    Text("No Trackpad Devices Found")
+                                    Text("No devices found")
                                         .font(.headline)
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(.secondary)
                                     
                                     Text("Make sure your trackpad is connected and try restarting the app")
                                         .font(.caption)
@@ -72,10 +68,9 @@ struct SettingsView: View {
                     }
                     
                     // Advanced Settings Section
-                    SettingsSection(title: "Advanced", icon: "gear") {
+                    SettingsSection(title: "Advanced") {
                         VStack(spacing: 12) {
                             SettingsRow(
-                                icon: "hand.point.up.left",
                                 title: "Debug View",
                                 subtitle: "View raw touch data and device information",
                                 action: {
@@ -104,26 +99,18 @@ struct SettingsView: View {
 
 struct SettingsSection<Content: View>: View {
     let title: String
-    let icon: String
     let content: Content
     
-    init(title: String, icon: String, @ViewBuilder content: () -> Content) {
+    init(title: String, @ViewBuilder content: () -> Content) {
         self.title = title
-        self.icon = icon
         self.content = content()
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack(spacing: 12) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundColor(.blue)
-                
-                Text(title)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
+            Text(title)
+                .font(.title2)
+                .fontWeight(.semibold)
             
             VStack(alignment: .leading, spacing: 12) {
                 content
@@ -136,7 +123,6 @@ struct SettingsSection<Content: View>: View {
 }
 
 struct SettingsRow: View {
-    let icon: String
     let title: String
     let subtitle: String
     let action: () -> Void
@@ -146,11 +132,6 @@ struct SettingsRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                Image(systemName: icon)
-                    .font(.title3)
-                    .foregroundColor(.blue)
-                    .frame(width: 24)
-                
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.headline)

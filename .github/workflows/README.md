@@ -48,6 +48,45 @@ To enable code signing, add these secrets to your GitHub repository:
 
 #### Unsigned Builds
 
+If you don't have code signing certificates, the workflow will automatically create an unsigned development build. These builds can still be used but may require users to manually allow them in System Preferences.
+
+## build-unsigned-dmg.yml
+
+This workflow specifically builds unsigned development versions of the TrackWeight app without requiring any certificates.
+
+### Features
+
+- **No Certificate Requirements**: Builds completely without code signing
+- **Development Build**: Creates unsigned development builds that work on any Mac
+- **Same DMG Features**: Includes all the same DMG features as the signed version
+- **Clear User Instructions**: Includes instructions for running unsigned apps
+- **Attribution**: Maintains proper credits to the original repository
+
+### Triggers
+
+The workflow runs on:
+- Pushes to main branches and the current working branch
+- Manual workflow dispatch
+
+### Benefits
+
+- **Easy Testing**: Perfect for testing builds without setting up certificates
+- **No Configuration**: Works immediately without any secrets or setup
+- **User-Friendly**: Includes clear instructions for users on how to run unsigned apps
+
+## Choosing the Right Workflow
+
+### Use `build-and-sign-dmg.yml` when:
+- You have Apple Developer certificates
+- You want to distribute signed, trusted builds
+- You're creating official releases
+
+### Use `build-unsigned-dmg.yml` when:
+- You don't have certificates
+- You want to test builds quickly
+- You're developing or experimenting
+- You need a simple build process
+
 If no signing certificates are provided, the workflow will create an unsigned development build that can still be distributed and run locally (users may need to allow it in System Preferences > Security & Privacy).
 
 ### Usage

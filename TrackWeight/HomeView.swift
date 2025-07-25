@@ -95,7 +95,8 @@ struct HomeView: View {
             .buttonStyle(.plain)
             .scaleEffect(1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: true)
-            
+            .padding(.vertical, 10)
+
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

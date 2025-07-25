@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*'
+    branches:
+      - 'copilot/fix-1'  # Enable testing on current working branch
   release:
     types: [published]
   workflow_dispatch:

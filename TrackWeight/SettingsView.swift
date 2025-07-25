@@ -11,79 +11,97 @@ struct SettingsView: View {
     @State private var showDebugView = false
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                // Header
-                VStack(spacing: 8) {
-                    Text("Settings")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                }
-                .padding(.top, 40)
-                .padding(.bottom, 40)
-                
-                // Settings Content
-                VStack(spacing: 30) {
-                    // Device Settings Section
-                    SettingsSection(title: "Device") {
-                        VStack(alignment: .leading, spacing: 16) {
+        VStack(spacing: 0) {
+            // Minimal Header
+            Text("Settings")
+                .font(.title)
+                .fontWeight(.medium)
+                .padding(.top, 32)
+                .padding(.bottom, 32)
+            
+            // Settings Cards
+            VStack(spacing: 20) {
+                // Device Card
+                SettingsCard {
+                    VStack(spacing: 20) {
+                        // Status Row
+                        HStack {
+                            HStack(spacing: 12) {
+                                Text("Trackpad")
+                                    .font(.headline)
+                                    .fontWeight(.medium)
+                            }
+                            
+                            Spacer()
+                            
                             if !viewModel.availableDevices.isEmpty {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("Trackpad")
-                                        .font(.headline)
-                                        .foregroundColor(.primary)
-                                    
-                                    Text("Select which trackpad device to use for weight tracking")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    
-                                    Picker("", selection: Binding(
-                                        get: { viewModel.selectedDevice },
-                                        set: { device in
-                                            if let device = device {
-                                                viewModel.selectDevice(device)
-                                            }
-                                        }
-                                    )) {
-                                        ForEach(viewModel.availableDevices, id: \.self) { device in
-                                            Text("\(device.deviceName) (ID: \(device.deviceID))")
-                                                .tag(device as OMSDeviceInfo?)
+                                Text("\(viewModel.availableDevices.count) device\(viewModel.availableDevices.count == 1 ? "" : "s")")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                        
+                        // Device Selector
+                        if !viewModel.availableDevices.isEmpty {
+                            HStack {
+                                Picker("", selection: Binding(
+                                    get: { viewModel.selectedDevice },
+                                    set: { device in
+                                        if let device = device {
+                                            viewModel.selectDevice(device)
                                         }
                                     }
-                                    .pickerStyle(MenuPickerStyle())
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                )) {
+                                    ForEach(viewModel.availableDevices, id: \.self) { device in
+                                        Text(device.deviceName)
+                                            .tag(device as OMSDeviceInfo?)
+                                    }
                                 }
-                            } else {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Text("No devices found")
-                                        .font(.headline)
-                                        .foregroundColor(.secondary)
-                                    
-                                    Text("Make sure your trackpad is connected and try restarting the app")
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
+                                .pickerStyle(MenuPickerStyle())
+                                
+                                Spacer()
+                            }
+                        } else {
+                            HStack {
+                                Text("No devices available")
+                                    .foregroundColor(.secondary)
+                                Spacer()
                             }
                         }
                     }
-                    
-                    // Advanced Settings Section
-                    SettingsSection(title: "Advanced") {
-                        VStack(spacing: 12) {
-                            SettingsRow(
-                                title: "Debug View",
-                                subtitle: "View raw touch data and device information",
-                                action: {
-                                    showDebugView = true
-                                }
-                            )
-                        }
-                    }
                 }
-                .frame(maxWidth: 600)
-                .padding(.horizontal, 40)
-                .padding(.bottom, 40)
+                
+                // Debug Card
+                SettingsCard {
+                    Button(action: { showDebugView = true }) {
+                        HStack(spacing: 16) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Debug Console")
+                                    .font(.headline)
+                                    .fontWeight(.medium)
+                                    .foregroundColor(.primary)
+                                
+                                Text("Raw touch data & diagnostics")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .fontWeight(.medium)
+                                .foregroundColor(.secondary.opacity(0.6))
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(CardButtonStyle())
+                }
             }
+            .frame(maxWidth: 480)
+            .padding(.horizontal, 40)
+            
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(NSColor.windowBackgroundColor))
@@ -97,68 +115,30 @@ struct SettingsView: View {
     }
 }
 
-struct SettingsSection<Content: View>: View {
-    let title: String
+struct SettingsCard<Content: View>: View {
     let content: Content
     
-    init(title: String, @ViewBuilder content: () -> Content) {
-        self.title = title
+    init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(title)
-                .font(.title2)
-                .fontWeight(.semibold)
-            
-            VStack(alignment: .leading, spacing: 12) {
-                content
-            }
-            .padding(24)
-            .background(Color(NSColor.controlBackgroundColor))
-            .cornerRadius(12)
+        VStack {
+            content
         }
+        .padding(24)
+        .background(Color(NSColor.controlBackgroundColor))
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.03), radius: 1, x: 0, y: 1)
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
     }
 }
 
-struct SettingsRow: View {
-    let title: String
-    let subtitle: String
-    let action: () -> Void
-    
-    @State private var isHovered = false
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    Text(subtitle)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                
-                Spacer()
-                
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
-            .background(isHovered ? Color(NSColor.selectedControlColor).opacity(0.1) : Color.clear)
-            .cornerRadius(8)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .onHover { hovered in
-            withAnimation(.easeInOut(duration: 0.2)) {
-                isHovered = hovered
-            }
-        }
+struct CardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
 

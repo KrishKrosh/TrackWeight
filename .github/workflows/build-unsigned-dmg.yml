@@ -86,29 +86,10 @@ jobs:
       run: |
         brew install create-dmg
     
-    - name: Create DMG
+    - name: Create README file
       run: |
-        # Create DMG with proper attribution to original repository
-        create-dmg \
-          --volname "${{ env.APP_NAME }}" \
-          --volicon "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Resources/AppIcon.icns" \
-          --window-pos 200 120 \
-          --window-size 600 300 \
-          --icon-size 100 \
-          --icon "${{ env.APP_NAME }}.app" 175 120 \
-          --hide-extension "${{ env.APP_NAME }}.app" \
-          --app-drop-link 425 120 \
-          --hdiutil-quiet \
-          "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" \
-          "$RUNNER_TEMP/export/"
-    
-    - name: Add attribution to DMG
-      run: |
-        # Mount the DMG to add attribution
-        hdiutil attach "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" -mountpoint "/Volumes/${{ env.APP_NAME }}"
-        
         # Create a README with attribution
-        cat > "/Volumes/${{ env.APP_NAME }}/README.txt" << 'EOF'
+        cat > "$RUNNER_TEMP/export/README.txt" << 'EOF'
         TrackWeight - MacBook Trackpad Digital Scale (UNSIGNED DEVELOPMENT BUILD)
         
         This application transforms your MacBook's trackpad into a precise digital weighing scale.
@@ -140,9 +121,22 @@ jobs:
         For more information, visit the original repository:
         https://github.com/KrishKrosh/TrackWeight
         EOF
-        
-        # Unmount the DMG
-        hdiutil detach "/Volumes/${{ env.APP_NAME }}"
+    
+    - name: Create DMG
+      run: |
+        # Create DMG with proper attribution to original repository
+        create-dmg \
+          --volname "${{ env.APP_NAME }}" \
+          --volicon "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Resources/AppIcon.icns" \
+          --window-pos 200 120 \
+          --window-size 600 300 \
+          --icon-size 100 \
+          --icon "${{ env.APP_NAME }}.app" 175 120 \
+          --hide-extension "${{ env.APP_NAME }}.app" \
+          --app-drop-link 425 120 \
+          --hdiutil-quiet \
+          "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" \
+          "$RUNNER_TEMP/export/"
     
     - name: Get version info
       id: version_info

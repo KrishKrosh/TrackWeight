@@ -13,6 +13,30 @@ struct DebugView: View {
 
     var body: some View {
         VStack {
+
+            // Device Selector
+            if !viewModel.availableDevices.isEmpty {
+                VStack(alignment: .leading) {
+                    Text("Trackpad Device:")
+                        .font(.headline)
+                    Picker("Select Device", selection: Binding(
+                        get: { viewModel.selectedDevice },
+                        set: { device in
+                            if let device = device {
+                                viewModel.selectDevice(device)
+                            }
+                        }
+                    )) {
+                        ForEach(viewModel.availableDevices, id: \.self) { device in
+                            Text("\(device.deviceName) (ID: \(device.deviceID))")
+                                .tag(device as OMSDeviceInfo?)
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                }
+                .padding(.bottom)
+            }
+            
             if viewModel.isListening {
                 Button {
                     viewModel.stop()

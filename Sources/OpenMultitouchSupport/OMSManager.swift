@@ -5,8 +5,22 @@
 */
 
 import Combine
-import OpenMultitouchSupportXCF
+@preconcurrency import OpenMultitouchSupportXCF
 import os
+
+public struct OMSDeviceInfo: Sendable, Hashable {
+    public let deviceName: String
+    public let deviceID: String
+    public let isBuiltIn: Bool
+    internal nonisolated(unsafe) let deviceInfo: OpenMTDeviceInfo
+    
+    internal init(_ deviceInfo: OpenMTDeviceInfo) {
+        self.deviceInfo = deviceInfo
+        self.deviceName = deviceInfo.deviceName
+        self.deviceID = deviceInfo.deviceID
+        self.isBuiltIn = deviceInfo.isBuiltIn
+    }
+}
 
 public final class OMSManager: Sendable {
     public static let shared = OMSManager()
@@ -29,6 +43,17 @@ public final class OMSManager: Sendable {
 
     public var isListening: Bool {
         protectedListener.withLockUnchecked { $0 != nil }
+    }
+    
+    public var availableDevices: [OMSDeviceInfo] {
+        guard let xcfManager = protectedManager.withLockUnchecked(\.self) else { return [] }
+        return xcfManager.availableDevices().map { OMSDeviceInfo($0) }
+    }
+    
+    public var currentDevice: OMSDeviceInfo? {
+        guard let xcfManager = protectedManager.withLockUnchecked(\.self),
+              let current = xcfManager.currentDevice() else { return nil }
+        return OMSDeviceInfo(current)
     }
 
     private init() {
@@ -59,6 +84,12 @@ public final class OMSManager: Sendable {
         xcfManager.remove(listener)
         protectedListener.withLockUnchecked { $0 = nil }
         return true
+    }
+    
+    @discardableResult
+    public func selectDevice(_ device: OMSDeviceInfo) -> Bool {
+        guard let xcfManager = protectedManager.withLockUnchecked(\.self) else { return false }
+        return xcfManager.selectDevice(device.deviceInfo)
     }
 
     @objc func listen(_ event: OpenMTEvent) {

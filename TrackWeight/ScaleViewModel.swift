@@ -10,13 +10,23 @@ import Combine
 @MainActor
 final class ScaleViewModel: ObservableObject {
     @Published var currentWeight: Float = 0.0
-    @Published var zeroOffset: Float = 0.0
+    @Published var zeroOffset: Float = 0.0 {
+        didSet {
+            // Persist zero offset to UserDefaults when it changes
+            UserDefaults.standard.set(zeroOffset, forKey: "TrackWeight.zeroOffset")
+        }
+    }
     @Published var isListening = false
     @Published var hasTouch = false
     
     private let manager = OMSManager.shared
     private var task: Task<Void, Never>?
     private var rawWeight: Float = 0.0
+    
+    init() {
+        // Restore saved zero offset from UserDefaults
+        self.zeroOffset = UserDefaults.standard.float(forKey: "TrackWeight.zeroOffset")
+    }
     
     func startListening() {
         if manager.startListening() {
@@ -47,11 +57,16 @@ final class ScaleViewModel: ObservableObject {
         }
     }
     
+    func resetCalibration() {
+        zeroOffset = 0.0
+        // This will automatically persist to UserDefaults via the didSet observer
+    }
+    
     private func processTouchData(_ touchData: [OMSTouchData]) {
         if touchData.isEmpty {
             hasTouch = false
             currentWeight = 0.0
-            zeroOffset = 0.0  // Reset zero when finger is lifted
+            // Do not reset zeroOffset when finger is lifted - preserve calibration
         } else {
             hasTouch = true
             rawWeight = touchData.first?.pressure ?? 0.0

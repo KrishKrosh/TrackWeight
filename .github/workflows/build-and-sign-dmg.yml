@@ -62,6 +62,9 @@ jobs:
           -scheme ${{ env.SCHEME }} \
           -configuration ${{ env.CONFIGURATION }} \
           -archivePath "$RUNNER_TEMP/${{ env.APP_NAME }}.xcarchive" \
+          -destination 'generic/platform=macOS' \
+          ARCHS="arm64 x86_64" \
+          ONLY_ACTIVE_ARCH=NO \
           archive
     
     - name: Export App
@@ -138,24 +141,49 @@ jobs:
         
         echo "✅ Application re-signed successfully"
 
-    - name: Verify Code Signatures
-      if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' }}
-      env:
-        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
+    - name: Verify Universal Binary and Code Signatures
       run: |
-        echo "🔍 Verifying main application signature..."
-        codesign --verify --verbose "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
-        
-        echo "🔍 Verifying framework signature..."
-        FRAMEWORK_PATH="$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
-        if [[ -d "$FRAMEWORK_PATH" ]]; then
-          codesign --verify --verbose "$FRAMEWORK_PATH"
+        echo "🏗️ Verifying Universal Binary Architecture..."
+        APP_BINARY="$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/MacOS/${{ env.APP_NAME }}"
+        if [[ -f "$APP_BINARY" ]]; then
+          echo "📊 Binary architectures:"
+          lipo -archs "$APP_BINARY"
+          
+          if lipo -archs "$APP_BINARY" | grep -q "arm64" && lipo -archs "$APP_BINARY" | grep -q "x86_64"; then
+            echo "✅ Universal binary confirmed: Contains both ARM64 and x86_64"
+          else
+            echo "❌ Warning: Binary may not be universal"
+            lipo -detailed_info "$APP_BINARY"
+          fi
         fi
         
-        echo "🔍 Deep verification with online validation..."
-        codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+        # Check framework architecture if it exists
+        FRAMEWORK_PATH="$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
+        if [[ -d "$FRAMEWORK_PATH" ]]; then
+          FRAMEWORK_BINARY="$FRAMEWORK_PATH/Versions/A/OpenMultitouchSupportXCF"
+          if [[ -f "$FRAMEWORK_BINARY" ]]; then
+            echo "📊 Framework architectures:"
+            lipo -archs "$FRAMEWORK_BINARY"
+          fi
+        fi
         
-        echo "✅ All signature verifications passed"
+        # Only verify signatures if certificates are available
+        if [[ -n "${{ secrets.BUILD_CERTIFICATE_BASE64 }}" ]]; then
+          echo "🔍 Verifying main application signature..."
+          codesign --verify --verbose "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+          
+          echo "🔍 Verifying framework signature..."
+          if [[ -d "$FRAMEWORK_PATH" ]]; then
+            codesign --verify --verbose "$FRAMEWORK_PATH"
+          fi
+          
+          echo "🔍 Deep verification with online validation..."
+          codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+          
+          echo "✅ All signature verifications passed"
+        else
+          echo "ℹ️  Skipping signature verification (no certificates provided)"
+        fi
     
     - name: Notarize App
       if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' && env.APPLE_ID != '' }}
@@ -253,12 +281,6 @@ jobs:
           
           Transform your MacBook's trackpad into a precise digital weighing scale!
           
-          ## Credits
-          **Original repository:** https://github.com/KrishKrosh/TrackWeight  
-          **Created by:** Krish Shah (@KrishKrosh)
-          
-          This build is from the fork at https://github.com/Rohithzr/TrackWeight
-          
           ## Installation
           1. Download the DMG file below
           2. Open the DMG and drag TrackWeight.app to your Applications folder
@@ -274,7 +296,6 @@ jobs:
           3. While maintaining finger contact, put your object on the trackpad
           4. Apply minimal pressure while maintaining contact to get the weight
           
-          For more information, visit the [original repository](https://github.com/KrishKrosh/TrackWeight).
         files: |
           ${{ runner.temp }}/${{ steps.version_info.outputs.dmg_name }}
         draft: false

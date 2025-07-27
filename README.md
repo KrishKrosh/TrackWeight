@@ -53,16 +53,6 @@ brew install --cask krishkrosh/apps/trackweight
 3. Disable App Sandbox in the project settings (required for trackpad access)
 4. Build and run the application
 
-## Automated Builds
-
-This repository includes a GitHub Actions workflow that automatically builds and packages the application into a signed DMG file. The workflow:
-
-- Builds the Xcode project using the latest stable Xcode
-- Signs the application (if signing certificates are configured)
-- Creates a professional DMG with proper attribution
-- Uploads the DMG as a release artifact
-- Creates GitHub releases for tagged versions
-
 For more information about setting up the build pipeline, see [.github/workflows/README.md](.github/workflows/README.md).
 
 ### Calibration Process

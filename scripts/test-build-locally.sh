@@ -31,13 +31,16 @@ rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 
 echo ""
-echo "Step 1: Building and Archiving App"
-echo "=================================="
+echo "Step 1: Building and Archiving App (Universal Binary)"
+echo "====================================================="
 xcodebuild \
   -project TrackWeight.xcodeproj \
   -scheme "$SCHEME" \
   -configuration "$CONFIGURATION" \
   -archivePath "$BUILD_DIR/$APP_NAME.xcarchive" \
+  -destination 'generic/platform=macOS' \
+  ARCHS="arm64 x86_64" \
+  ONLY_ACTIVE_ARCH=NO \
   archive
 
 echo ""
@@ -118,13 +121,36 @@ fi
   fi
 
 echo ""
-echo "Step 2.5: Verifying Code Signatures"
-echo "==================================="
+echo "Step 2.5: Verifying Universal Binary and Code Signatures"
+echo "========================================================"
+echo "🏗️ Verifying Universal Binary Architecture..."
+APP_BINARY="$BUILD_DIR/export/$APP_NAME.app/Contents/MacOS/$APP_NAME"
+if [[ -f "$APP_BINARY" ]]; then
+  echo "📊 Binary architectures:"
+  lipo -archs "$APP_BINARY"
+  
+  if lipo -archs "$APP_BINARY" | grep -q "arm64" && lipo -archs "$APP_BINARY" | grep -q "x86_64"; then
+    echo "✅ Universal binary confirmed: Contains both ARM64 and x86_64"
+  else
+    echo "❌ Warning: Binary may not be universal"
+    lipo -detailed_info "$APP_BINARY"
+  fi
+fi
+
+# Check framework architecture if it exists
+FRAMEWORK_PATH="$BUILD_DIR/export/$APP_NAME.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
+if [[ -d "$FRAMEWORK_PATH" ]]; then
+  FRAMEWORK_BINARY="$FRAMEWORK_PATH/Versions/A/OpenMultitouchSupportXCF"
+  if [[ -f "$FRAMEWORK_BINARY" ]]; then
+    echo "📊 Framework architectures:"
+    lipo -archs "$FRAMEWORK_BINARY"
+  fi
+fi
+
 echo "🔍 Verifying main application signature..."
 codesign --verify --verbose "$BUILD_DIR/export/$APP_NAME.app" || echo "⚠️ Main app signature verification failed"
 
 echo "🔍 Verifying framework signature..." 
-FRAMEWORK_PATH="$BUILD_DIR/export/$APP_NAME.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
 if [[ -d "$FRAMEWORK_PATH" ]]; then
   codesign --verify --verbose "$FRAMEWORK_PATH" || echo "⚠️ Framework signature verification failed"
 fi

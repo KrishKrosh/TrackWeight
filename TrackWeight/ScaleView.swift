@@ -9,15 +9,15 @@ import AppKit
 
 struct ScaleView: View {
     @StateObject private var viewModel = ScaleViewModel()
-    @State private var scaleCompression: CGFloat = 0 // Controls vertical compression of the scale
-    @State private var displayShake = false // For subtle display shake animation (not used in this version but kept)
-    @State private var particleOffset: CGFloat = 0 // For particle effect (not used in this version but kept)
+    @State private var scaleCompression: CGFloat = 0
+    @State private var displayShake = false
+    @State private var particleOffset: CGFloat = 0
     @State private var keyMonitor: Any?
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Animated gradient background (uncommented and slightly adjusted colors)
+                // Animated gradient background
                 LinearGradient(
                     colors: [
                         Color(red: 0.1, green: 0.1, blue: 0.15), // Darker start
@@ -28,8 +28,8 @@ struct ScaleView: View {
                 )
                 .ignoresSafeArea()
 
-                VStack(spacing: geometry.size.height * 0.06) { // Overall vertical spacing
-                    // Title with subtitle directly underneath
+                VStack(spacing: geometry.size.height * 0.06) {
+                    
                     VStack(spacing: 8) {
                         Text("Track Weight")
                             .font(.system(size: min(max(geometry.size.width * 0.05, 24), 42), weight: .bold, design: .rounded))
@@ -45,18 +45,18 @@ struct ScaleView: View {
 
                         Text("Place your finger on the trackpad to begin")
                             .font(.system(size: min(max(geometry.size.width * 0.022, 14), 18), weight: .medium))
-                            .foregroundStyle(.gray.opacity(0.7)) // Slightly more visible gray
+                            .foregroundStyle(.gray.opacity(0.7))
                             .multilineTextAlignment(.center)
                             .frame(maxWidth: geometry.size.width * 0.8)
-                            .opacity(viewModel.hasTouch ? 0 : 1) // Fades out when touch is detected
+                            .opacity(viewModel.hasTouch ? 0 : 1)
                             .animation(.easeInOut(duration: 0.5), value: viewModel.hasTouch)
                     }
-                    .frame(height: max(geometry.size.height * 0.15, 80)) // Fixed height for title + subtitle
-                    .frame(maxWidth: .infinity) // Ensure full width for centering
+                    .frame(height: max(geometry.size.height * 0.15, 80))
+                    .frame(maxWidth: .infinity)
 
-                    Spacer() // Pushes the scale towards the center
+                    Spacer()
 
-                    // Modern Digital Scale View - responsive size
+                    //Scale View - responsive size
                     HStack {
                         Spacer()
                         ModernScaleView( // Changed from CartoonScaleView
@@ -69,9 +69,8 @@ struct ScaleView: View {
                         Spacer()
                     }
 
-                    Spacer() // Pushes button towards the bottom
+                    Spacer()
 
-                    // Fixed container for button to prevent jumping
                     VStack(spacing: 10) {
                         if viewModel.hasTouch {
                             Text("Press spacebar or click to zero")
@@ -92,26 +91,26 @@ struct ScaleView: View {
                             .frame(width: min(max(geometry.size.width * 0.2, 140), 180),
                                    height: min(max(geometry.size.height * 0.08, 40), 55))
                             .background(
-                                RoundedRectangle(cornerRadius: 25) // Use the same corner radius as the HomeView button
-                                    .fill(.ultraThinMaterial) // Glassmorphism for the button
+                                RoundedRectangle(cornerRadius: 25)
+                                    .fill(.ultraThinMaterial)
                             )
-                            .overlay( // Subtle border for definition
+                            .overlay(
                                 RoundedRectangle(cornerRadius: 25)
                                     .stroke(.white.opacity(0.2), lineWidth: 1)
                             )
-                            .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4) // Softer shadow
+                            .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
                         }
                         .buttonStyle(.plain)
-                        .opacity(viewModel.hasTouch ? 1 : 0) // Fades in when touch is detected
-                        .scaleEffect(viewModel.hasTouch ? 1 : 0.8) // Scales in when touch is detected
+                        .opacity(viewModel.hasTouch ? 1 : 0)
+                        .scaleEffect(viewModel.hasTouch ? 1 : 0.8)
                         .animation(.spring(response: 0.4, dampingFraction: 0.8), value: viewModel.hasTouch)
                     }
-                    .frame(height: min(max(geometry.size.height * 0.15, 80), 100)) // Fixed space for button + instruction
-                    .frame(maxWidth: .infinity) // Ensure full width for centering
+                    .frame(height: min(max(geometry.size.height * 0.15, 80), 100))
+                    .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, max(geometry.size.width * 0.05, 20)) // Overall horizontal padding
-                .padding(.vertical, max(geometry.size.height * 0.03, 20)) // Overall vertical padding
-                .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensure the VStack takes full available space
+                .padding(.horizontal, max(geometry.size.width * 0.05, 20))
+                .padding(.vertical, max(geometry.size.height * 0.03, 20))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .focusable()
@@ -150,25 +149,23 @@ struct ScaleView: View {
     }
 }
 
-// MARK: - ModernScaleView (Replaces CartoonScaleView)
+
 struct ModernScaleView: View {
     let weight: Float
     let hasTouch: Bool
     @Binding var compression: CGFloat
-    @Binding var displayShake: Bool // Kept for potential future use
+    @Binding var displayShake: Bool // can be used in future
     let scaleFactor: CGFloat
 
-    // Max weight for needle rotation (e.g., 200 grams for full sweep)
+
     private let maxNeedleWeight: Float = 200.0
-    // Angle range for the needle (e.g., from -60 degrees to +60 degrees)
     private let needleAngleRange: CGFloat = 120.0
 
     var body: some View {
         VStack(spacing: 0) {
-            // Scale Platform (top part where object is placed)
-            RoundedRectangle(cornerRadius: 12 * scaleFactor) // Slightly rounded corners
+            RoundedRectangle(cornerRadius: 12 * scaleFactor)
                 .fill(
-                    LinearGradient( // Subtle metallic gradient
+                    LinearGradient( 
                         colors: [
                             Color(red: 0.8, green: 0.8, blue: 0.85),
                             Color(red: 0.95, green: 0.95, blue: 1.0)
@@ -177,100 +174,98 @@ struct ModernScaleView: View {
                         endPoint: .bottomTrailing
                     )
                 )
-                .frame(width: 250 * scaleFactor, height: 25 * scaleFactor) // Thicker platform
-                .offset(y: compression * 15) // Moves down on compression
-                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3) // Soft shadow
+                .frame(width: 280 * scaleFactor, height: 20 * scaleFactor)
+                .offset(y: compression * 15)
+                .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 3)
 
             // Scale Body (main part)
             ZStack {
-                RoundedRectangle(cornerRadius: 20 * scaleFactor) // Rounded, modern shape
-                    .fill(.ultraThinMaterial) // Frosted glass body
-                    .frame(width: 280 * scaleFactor, height: 180 * scaleFactor) // Wider, more substantial body
-                    .scaleEffect(y: 1 - compression * 1.2) // Squeeze effect: Increased multiplier for more squeeze
-                    .offset(y: compression * 15) // Adjust vertical position during compression
-                    .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 10) // Enhanced shadow for depth
+                RoundedRectangle(cornerRadius: 20 * scaleFactor)
+                    .fill(.ultraThinMaterial)
+                    .frame(width: 280 * scaleFactor, height: 180 * scaleFactor)
+                    .scaleEffect(y: 1 - compression * 1.2)
+                    .offset(y: compression * 15)
+                    .shadow(color: .black.opacity(0.2), radius: 15, x: 0, y: 10)
                     .overlay( // Subtle outer border
-                        RoundedRectangle(cornerRadius: 25 * scaleFactor)
+                        RoundedRectangle(cornerRadius: 20 * scaleFactor)
                             .stroke(Color.white.opacity(0.15), lineWidth: 1 * scaleFactor)
                     )
 
                 // Digital Display Screen
-                RoundedRectangle(cornerRadius: 15 * scaleFactor)
-                    .fill(Color.black.opacity(0.6)) // Dark, slightly transparent background for the screen
+                RoundedRectangle(cornerRadius: 20 * scaleFactor)
+                    .fill(Color.black.opacity(0.6))
                     .frame(width: 200 * scaleFactor, height: 80 * scaleFactor)
                     .overlay( // Inner glow effect for the screen
                         RoundedRectangle(cornerRadius: 15 * scaleFactor)
                             .stroke(Color.white.opacity(hasTouch ? 0.3 : 0.1), lineWidth: hasTouch ? 1.5 * scaleFactor : 1 * scaleFactor)
                             .blur(radius: hasTouch ? 2 * scaleFactor : 0)
                     )
-                    .offset(y: -25 * scaleFactor + compression * 15) // Adjust position with compression
+                    .offset(y: -25 * scaleFactor + compression * 15)
 
-                // Weight display (numbers)
+                // Weight display
                 VStack(spacing: 4 * scaleFactor) {
                     Text(String(format: "%.1f", weight))
-                        .font(.system(size: 48 * scaleFactor, weight: .bold, design: .monospaced)) // Larger, bolder font
+                        .font(.system(size: 42 * scaleFactor, weight: .bold, design: .monospaced))
                         .foregroundStyle(.white) // White numbers
-                        .shadow(color: .white.opacity(hasTouch ? 0.6 : 0), radius: hasTouch ? 4 : 0) // Glow effect on numbers when touched
+                        .shadow(color: .white.opacity(hasTouch ? 0.6 : 0), radius: hasTouch ? 4 : 0) // Glow effect when touch
                         .animation(.easeInOut(duration: 0.2), value: weight)
 
                     Text("grams")
-                        .font(.system(size: 10 * scaleFactor, weight: .medium)) // Larger unit text
-                        .foregroundStyle(.white.opacity(0.6)) // Softer white for units
+                        .font(.system(size: 10 * scaleFactor, weight: .medium))
+                        .foregroundStyle(.white.opacity(0.6))
                 }
-                .offset(y: 50 * scaleFactor + compression * 15) // Match display screen position
+                .offset(y: 50 * scaleFactor + compression * 15)
 
-                // Status Indicator (simple dot) - now inside the scale body
+                // Status Indicator
                 if hasTouch {
                     Circle()
-                        .fill(.teal) // Bright teal for active state
+                        .fill(.teal)
                         .frame(width: 20 * scaleFactor, height: 10 * scaleFactor)
-                        .offset(x: 120 * scaleFactor, y: -70 * scaleFactor + compression * 15) // Positioned at top-right of screen
+                        .offset(x: 120 * scaleFactor, y: -70 * scaleFactor + compression * 15)
                         .animation(.easeInOut(duration: 0.3), value: hasTouch)
                 }
 
-                // NEW: Odometer-like Needle Animation
-                // Visible only when touch is detected and weight is above a threshold
-                if hasTouch && weight > 0.5 { // Show needle only when weighing something
-                    // Needle shape
+// Needle Animation
+                if weight > 0.5 {
                     Rectangle()
                         .fill(Color.white.opacity(0.8))
-                        .frame(width: 3 * scaleFactor, height: 40 * scaleFactor) // Needle dimensions
+                        .frame(width: 3 * scaleFactor, height: 40 * scaleFactor)
                         .cornerRadius(2 * scaleFactor)
-                        .offset(y: -25 * scaleFactor + compression * 15) // Position at display center, adjusted for compression
+                        .offset(y: -25 * scaleFactor + compression * 15)
                         .rotationEffect(
-                            // Calculate rotation based on weight, clamped to range
                             Angle(degrees: Double(min(weight, maxNeedleWeight) / maxNeedleWeight) * needleAngleRange - (needleAngleRange / 2))
                         )
-                        .shadow(color: .white.opacity(0.3), radius: 2 * scaleFactor) // Subtle glow
-                        .animation(.spring(response: 0.5, dampingFraction: 0.7), value: weight) // Smooth animation
+                        .shadow(color: .white.opacity(0.3), radius: 2 * scaleFactor)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.7), value: weight)
 
-                    // Small pivot circle at the base of the needle
+                    // Pivot circle
                     Circle()
                         .fill(Color.white.opacity(0.9))
                         .frame(width: 10 * scaleFactor, height: 10 * scaleFactor)
-                        .offset(y: -2 * scaleFactor + compression * 15) // Position at display center, adjusted for compression
+                        .offset(y: -2 * scaleFactor + compression * 15)
                         .shadow(color: .black.opacity(0.2), radius: 2 * scaleFactor)
+
+
                 }
             }
 
             // Scale Legs
-            HStack(spacing: 160 * scaleFactor) { // Increased spacing between legs
+            HStack(spacing: 160 * scaleFactor) {
                 ForEach(0..<2, id: \.self) { _ in
-                    Capsule() // More modern capsule shape for legs
-                        .fill(.gray.opacity(0.6))
-                        .frame(width: 15 * scaleFactor, height: 40 * scaleFactor) // Thicker, taller legs
-                        .offset(y: compression * 3)
+                    Capsule()
+                        .fill(.gray.opacity(0.5))
+                        .frame(width: 20 * scaleFactor, height: 40 * scaleFactor)
+                        .offset(y: -2 * compression * 3)
                         .shadow(color: .black.opacity(0.1), radius: 3, x: 0, y: 2) // Subtle shadow
                 }
             }
-            .offset(y: -15 * scaleFactor) // Adjust vertical position relative to scale body
+            .offset(y: -15 * scaleFactor)
         }
-        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: compression) // Smooth compression animation
+        .animation(.spring(response: 0.4, dampingFraction: 0.8), value: compression)
     }
 }
 
 
-// MARK: - FocusEffectModifier
 struct FocusEffectModifier: ViewModifier {
     func body(content: Content) -> some View {
         if #available(macOS 14.0, *) {
@@ -281,9 +276,9 @@ struct FocusEffectModifier: ViewModifier {
     }
 }
 
-// MARK: - Preview
+
 #Preview {
-    // A dark gradient background to highlight the sleek, modern scale design
+    //dark gradient background
     LinearGradient(gradient: Gradient(colors: [Color(red: 0.05, green: 0.05, blue: 0.1), Color(red: 0.0, green: 0.0, blue: 0.05)]), startPoint: .topLeading, endPoint: .bottomTrailing)
         .edgesIgnoringSafeArea(.all)
         .overlay(

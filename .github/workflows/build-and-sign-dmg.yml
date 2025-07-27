@@ -37,14 +37,16 @@ jobs:
         xcode-version: latest-stable
     
     - name: Import Code-Signing Certificates
-      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' }}
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       uses: Apple-Actions/import-codesign-certs@v2
       with:
         p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
         p12-password: ${{ secrets.P12_PASSWORD }}
     
     - name: Install provisioning profile
-      if: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 != '' }}
+      if: ${{ env.BUILD_PROVISION_PROFILE_BASE64 != '' }}
       env:
         BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.BUILD_PROVISION_PROFILE_BASE64 }}
       run: |
@@ -103,8 +105,9 @@ jobs:
           -exportArchive
 
     - name: Re-sign App Components
-      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' }}
       env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
       run: |
         echo "🔏 Re-signing framework with Developer ID certificate..."
@@ -136,7 +139,9 @@ jobs:
         echo "✅ Application re-signed successfully"
 
     - name: Verify Code Signatures
-      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' }}
+      env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
       run: |
         echo "🔍 Verifying main application signature..."
         codesign --verify --verbose "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
@@ -153,8 +158,9 @@ jobs:
         echo "✅ All signature verifications passed"
     
     - name: Notarize App
-      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' && secrets.APPLE_ID != '' }}
+      if: ${{ env.BUILD_CERTIFICATE_BASE64 != '' && env.APPLE_ID != '' }}
       env:
+        BUILD_CERTIFICATE_BASE64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
         APPLE_ID: ${{ secrets.APPLE_ID }}
         APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}

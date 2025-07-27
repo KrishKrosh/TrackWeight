@@ -22,7 +22,7 @@ The key insight is that trackpad pressure events are only generated when there's
 
 ## Requirements
 
-- **macOS 13.0+** (for Open Multi-Touch Support library compatibility)
+- **macOS 13.0+** (Ventura or later)
 - **MacBook with Force Touch trackpad** (2015 or newer MacBook Pro, 2016 or newer MacBook)
 - **App Sandbox disabled** (required for low-level trackpad access)
 - **Xcode 16.0+** and **Swift 6.0+** (for development)

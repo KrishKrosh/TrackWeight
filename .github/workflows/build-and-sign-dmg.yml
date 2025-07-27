@@ -287,7 +287,7 @@ jobs:
           3. Run the app and follow the setup instructions
           
           ## Requirements
-          - macOS 13.0 or later
+          - macOS 13.0 or later (Ventura or newer)
           - MacBook with Force Touch trackpad (2015 or newer MacBook Pro, 2016 or newer MacBook)
           
           ## Usage

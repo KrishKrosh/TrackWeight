@@ -18,3 +18,8 @@ build/
 
 # AI
 .claude/
+
+.env
+.secrets
+
+local_build/

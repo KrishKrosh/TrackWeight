@@ -3,14 +3,24 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>development</string>
+    <string>developer-id</string>
     <key>teamID</key>
     <string>9ZRLG6277G</string>
     <key>signingStyle</key>
-    <string>automatic</string>
+    <string>manual</string>
+    <key>signingCertificate</key>
+    <string>Developer ID Application: Krish Shah (9ZRLG6277G)</string>
     <key>stripSwiftSymbols</key>
     <true/>
     <key>destination</key>
     <string>export</string>
+    <key>manageAppVersionAndBuildNumber</key>
+    <true/>
+    <key>compileBitcode</key>
+    <false/>
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <false/>
 </dict>
 </plist>

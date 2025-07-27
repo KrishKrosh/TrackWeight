@@ -101,42 +101,109 @@ jobs:
           -exportPath "$RUNNER_TEMP/export" \
           -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
           -exportArchive
+
+    - name: Re-sign App Components
+      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      env:
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      run: |
+        echo "🔏 Re-signing framework with Developer ID certificate..."
+        FRAMEWORK_PATH="$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
+        if [[ -d "$FRAMEWORK_PATH" ]]; then
+          codesign --force --sign "Developer ID Application" \
+            --options runtime \
+            --timestamp \
+            "$FRAMEWORK_PATH/Versions/A/OpenMultitouchSupportXCF"
+          
+          codesign --force --sign "Developer ID Application" \
+            --options runtime \
+            --timestamp \
+            "$FRAMEWORK_PATH"
+          
+          echo "✅ Framework re-signed successfully"
+        fi
+        
+        # Re-sign the main app to ensure everything is consistent
+        echo "🔏 Re-signing main application..."
+        codesign --force --sign "Developer ID Application" \
+          --options runtime \
+          --entitlements "TrackWeight/TrackWeight.entitlements" \
+          --timestamp \
+          --deep \
+          --strict \
+          "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+        
+        echo "✅ Application re-signed successfully"
+
+    - name: Verify Code Signatures
+      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' }}
+      run: |
+        echo "🔍 Verifying main application signature..."
+        codesign --verify --verbose "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+        
+        echo "🔍 Verifying framework signature..."
+        FRAMEWORK_PATH="$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Frameworks/OpenMultitouchSupportXCF.framework"
+        if [[ -d "$FRAMEWORK_PATH" ]]; then
+          codesign --verify --verbose "$FRAMEWORK_PATH"
+        fi
+        
+        echo "🔍 Deep verification with online validation..."
+        codesign --verify --deep --strict --verbose=2 "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app"
+        
+        echo "✅ All signature verifications passed"
     
+    - name: Notarize App
+      if: ${{ secrets.BUILD_CERTIFICATE_BASE64 != '' && secrets.APPLE_ID != '' }}
+      env:
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      run: |
+        echo "🍎 Starting notarization process..."
+        
+        # Create a zip file for notarization (notarytool prefers zip over raw .app)
+        cd "$RUNNER_TEMP/export"
+        # Use ditto for creating zip compatible with Apple's notarization service  
+        ditto -c -k --keepParent "${{ env.APP_NAME }}.app" "${{ env.APP_NAME }}.zip"
+        
+        # Submit for notarization
+        echo "📤 Submitting app for notarization..."
+        xcrun notarytool submit "${{ env.APP_NAME }}.zip" \
+          --apple-id "$APPLE_ID" \
+          --password "$APPLE_ID_PASSWORD" \
+          --team-id "$APPLE_TEAM_ID" \
+          --wait \
+          --timeout 20m
+        
+        # Staple the notarization ticket to the app
+        echo "📎 Stapling notarization ticket..."
+        xcrun stapler staple "${{ env.APP_NAME }}.app"
+        
+        # Verify the stapling worked
+        echo "✅ Verifying notarization..."
+        xcrun stapler validate "${{ env.APP_NAME }}.app"
+        
+        echo "🎉 Notarization complete!"
+
     - name: Install create-dmg
       run: |
         brew install create-dmg
     
-    - name: Create README file
-      run: |
-        # Create a README with attribution
-        cat > "$RUNNER_TEMP/export/README.txt" << 'EOF'
-        TrackWeight - MacBook Trackpad Digital Scale
-        
-        This application transforms your MacBook's trackpad into a precise digital weighing scale.
-        
-        USAGE:
-        1. Open the scale
-        2. Rest your finger on the trackpad
-        3. While maintaining finger contact, put your object on the trackpad
-        4. Try to put as little pressure on the trackpad while still maintaining contact
-        
-        REQUIREMENTS:
-        - macOS 13.0 or later
-        - MacBook with Force Touch trackpad (2015 or newer MacBook Pro, 2016 or newer MacBook)
-        - App Sandbox must be disabled for trackpad access
-        
-        LICENSE: MIT License
-        
-        For more information, visit the original repository:
-        https://github.com/KrishKrosh/TrackWeight
-        EOF
-    
     - name: Create DMG
       run: |
-        # Create DMG with proper attribution to original repository
+        # Create a clean directory with only the app for DMG creation
+        echo "📁 Preparing clean DMG contents..."
+        DMG_STAGING="$RUNNER_TEMP/dmg_staging"
+        rm -rf "$DMG_STAGING"
+        mkdir -p "$DMG_STAGING"
+        
+        # Copy only the app to staging directory
+        cp -R "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app" "$DMG_STAGING/"
+        
+        # Create clean professional DMG
         create-dmg \
           --volname "${{ env.APP_NAME }}" \
-          --volicon "$RUNNER_TEMP/export/${{ env.APP_NAME }}.app/Contents/Resources/AppIcon.icns" \
+          --volicon "$DMG_STAGING/${{ env.APP_NAME }}.app/Contents/Resources/AppIcon.icns" \
           --window-pos 200 120 \
           --window-size 600 300 \
           --icon-size 100 \
@@ -145,7 +212,7 @@ jobs:
           --app-drop-link 425 120 \
           --hdiutil-quiet \
           "$RUNNER_TEMP/${{ env.APP_NAME }}.dmg" \
-          "$RUNNER_TEMP/export/"
+          "$DMG_STAGING/"
     
     - name: Get version info
       id: version_info
@@ -217,6 +284,6 @@ jobs:
         echo "🔗 Original repository: https://github.com/KrishKrosh/TrackWeight" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "The DMG includes:" >> $GITHUB_STEP_SUMMARY
-        echo "- TrackWeight.app (signed if certificates provided)" >> $GITHUB_STEP_SUMMARY
-        echo "- README.txt with attribution and usage instructions" >> $GITHUB_STEP_SUMMARY
-        echo "- Proper credits to the original repository" >> $GITHUB_STEP_SUMMARY
+        echo "- TrackWeight.app (signed and notarized if certificates provided)" >> $GITHUB_STEP_SUMMARY
+        echo "- Clean professional DMG with just the app and Applications link" >> $GITHUB_STEP_SUMMARY
+        echo "- Proper code signing with hardened runtime enabled" >> $GITHUB_STEP_SUMMARY

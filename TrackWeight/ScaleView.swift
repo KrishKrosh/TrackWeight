@@ -6,12 +6,7 @@
 import SwiftUI
 import AppKit
 
-// MARK: - ViewModel (Required for the view to work)
-// ⚠️ If you have this class defined elsewhere, DELETE this placeholder to avoid errors.
 
-
-
-// MARK: - Main View
 struct ScaleView: View {
     @StateObject private var viewModel = ScaleViewModel()
     @State private var scaleCompression: CGFloat = 0
@@ -191,7 +186,7 @@ struct FitnessScaleView: View {
                 
                 // Right Arm
                 ArmView(scaleFactor: scaleFactor)
-                    .rotationEffect(.degrees(180)) 
+                    .rotationEffect(.degrees(180))
                     .offset(x: 80 * scaleFactor, y: 30 * scaleFactor + trayOffset)
             }
 

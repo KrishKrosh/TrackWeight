@@ -14,7 +14,7 @@ struct ContentView: View {
             HomeView {
                 showHomePage = false
             }
-            .frame(minWidth: 700, minHeight: 500)
+            .frame(minWidth: 700, minHeight: 700)
         } else {
             TabView(selection: $selectedTab) {
                 TrackWeightView()
@@ -38,7 +38,7 @@ struct ContentView: View {
                     }
                     .tag(2)
             }
-            .frame(minWidth: 700, minHeight: 500)
+            .frame(minWidth: 700, minHeight: 700)
         }
     }
 }

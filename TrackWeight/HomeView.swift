@@ -4,9 +4,11 @@
 //
 
 import SwiftUI
+import OpenMultitouchSupport
 
 struct HomeView: View {
     let onBegin: () -> Void
+    @StateObject private var viewModel = ContentViewModel()
     
     var body: some View {
         VStack(spacing: 40) {
@@ -71,8 +73,69 @@ struct HomeView: View {
                 .frame(maxWidth: 500)
             }
             
-            Spacer()
-            
+            // Select a device first
+            if viewModel.availableDevices.count > 1 {
+                VStack(spacing: 20) {
+                    // Device Card
+                    SettingsCard {
+                        VStack(spacing: 12) {
+                            // Status Row
+                            HStack {
+                                HStack(spacing: 12) {
+                                    Text("Verify Device Selection")
+                                        .font(.headline)
+                                        .fontWeight(.medium)
+                                }
+                                
+                                Spacer()
+                                
+                                
+                                Text("\(viewModel.availableDevices.count) device\(viewModel.availableDevices.count == 1 ? "" : "s")")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                
+                            }
+                            
+                            // Device Selector
+                            
+                            VStack(alignment: .leading, spacing: 12) {
+                                HStack {
+                                    Image(systemName: "exclamationmark.triangle")
+                                        .font(.system(size: 16, weight: .medium))
+                                        .font(.caption)
+                                        .foregroundColor(.orange)
+                                    Text("OMS may default to the Touch Bar on Macs equipped with it. You can change the selected device in the settings tab. Please ensure you've selected the correct trackpad.")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(.orange)
+                                }
+                                .padding(.horizontal)
+                                HStack {
+                                    Picker("", selection: Binding(
+                                        get: { viewModel.selectedDevice },
+                                        set: { device in
+                                            if let device = device {
+                                                viewModel.selectDevice(device)
+                                            }
+                                        }
+                                    )) {
+                                        ForEach(viewModel.availableDevices, id: \.self) { device in
+                                            Text(device.deviceName)
+                                                .tag(device as OMSDeviceInfo?)
+                                        }
+                                    }
+                                    .pickerStyle(MenuPickerStyle())
+                                    
+                                    Spacer()
+                                }
+                                
+                            }
+                            .frame(width: 450)
+                        }
+                    }
+                }
+                .frame(maxWidth: 480)
+                .padding(.horizontal, 40)
+            }
             // Begin button
             Button(action: onBegin) {
                 HStack(spacing: 10) {
@@ -99,7 +162,7 @@ struct HomeView: View {
             .scaleEffect(1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.8), value: true)
             .padding(.vertical, 10)
-
+            
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

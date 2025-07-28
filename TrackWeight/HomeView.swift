@@ -74,29 +74,30 @@ struct HomeView: View {
             }
             
             // Select a device first
-            VStack(spacing: 20) {
-                // Device Card
-                SettingsCard {
-                    VStack(spacing: 12) {
-                        // Status Row
-                        HStack {
-                            HStack(spacing: 12) {
-                                Text("Verify Device Selection")
-                                    .font(.headline)
-                                    .fontWeight(.medium)
-                            }
-                            
-                            Spacer()
-                            
-                            if !viewModel.availableDevices.isEmpty {
+            if viewModel.availableDevices.count > 1 {
+                VStack(spacing: 20) {
+                    // Device Card
+                    SettingsCard {
+                        VStack(spacing: 12) {
+                            // Status Row
+                            HStack {
+                                HStack(spacing: 12) {
+                                    Text("Verify Device Selection")
+                                        .font(.headline)
+                                        .fontWeight(.medium)
+                                }
+                                
+                                Spacer()
+                                
+                                
                                 Text("\(viewModel.availableDevices.count) device\(viewModel.availableDevices.count == 1 ? "" : "s")")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
+                                
                             }
-                        }
-                        
-                        // Device Selector
-                        if !viewModel.availableDevices.isEmpty {
+                            
+                            // Device Selector
+                            
                             VStack(alignment: .leading, spacing: 12) {
                                 HStack {
                                     Image(systemName: "exclamationmark.triangle")
@@ -129,19 +130,12 @@ struct HomeView: View {
                                 
                             }
                             .frame(width: 450)
-                        } else {
-                            HStack {
-                                Text("No devices available")
-                                    .foregroundColor(.secondary)
-                                Spacer()
-                            }
                         }
                     }
                 }
+                .frame(maxWidth: 480)
+                .padding(.horizontal, 40)
             }
-            .frame(maxWidth: 480)
-            .padding(.horizontal, 40)
-            
             // Begin button
             Button(action: onBegin) {
                 HStack(spacing: 10) {

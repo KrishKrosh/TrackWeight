@@ -1,53 +1,53 @@
-# TrackWeight ランディングページ - 遊び心ある目次構成
+# TrackWeight Landing Page - Playful Structure
 
-## 🎯 KrishKroshスタイルに合わせた構成コンセプト
-**「技術の驚きと日常の楽しさを両立させる」**
+## 🎯 Design Concept Aligned with KrishKrosh's Style
+**"Balancing technical innovation with everyday joy"**
 
 ---
 
-## 📑 目次構造
+## 📑 Page Structure
 
 ### 🏠 **1. Hero Section - "The Unexpected Scale"**
-**「指を置く、そして測る。」**
-- MacBookのトラックパッドが、いま重さを測るツールになる
-- アニメーション：指を置く → 数値が表示される → 驚きの表情
-- サブコピー：*"Turn your everyday trackpad into something extraordinary"*
+**"Place your finger. Then measure."**
+- Your MacBook's trackpad becomes a weighing tool, right now
+- Animation: Place finger → Numbers appear → Surprise expression
+- Subheading: *"Turn your everyday trackpad into something extraordinary"*
 
 ---
 
-### 🎪 **2. "Wait, What?" - できることの紹介**
-**見出し：** *"Your trackpad can do WHAT now?"*
+### 🎪 **2. "Wait, What?" - Feature Introduction**
+**Heading:** *"Your trackpad can do WHAT now?"*
 
-#### 📦 **使用シーン（3つのカード）**
-- **🍯 Kitchen Hacker** - 調味料の計量、レシピの実験
-- **📮 Package Pioneer** - 手紙や小包の重さチェック
-- **🔬 Curious Scientist** - 子どもの実験、物理の学習
+#### 📦 **Use Cases (3 Cards)**
+- **🍯 Kitchen Hacker** - Spice measurements, recipe experiments
+- **📮 Package Pioneer** - Letter and small package weight checks
+- **🔬 Curious Scientist** - Kids' experiments, physics learning
 
-各カードにユーモアあるマイクロコピー：
+Each card with humorous microcopy:
 - *"Finally, your laptop earns its keep in the kitchen"*
 - *"Because who needs a real scale anyway?"*
 - *"Turn physics class into 'wow, that's cool' class"*
 
 ---
 
-### 🛠️ **3. "How It Works" - 魔法の仕組み**
-**見出し：** *"The Magic Behind the Madness"*
+### 🛠️ **3. "How It Works" - The Magic Mechanism**
+**Heading:** *"The Magic Behind the Madness"*
 
-#### ステップ形式（視覚的フロー）
-1. **🤏 Touch** - 指をトラックパッドに軽く置く
-2. **⚖️ Place** - 測りたいものをそっと載せる  
-3. **📊 Measure** - Force Touchセンサーが重さを計算
-4. **🎉 Marvel** - 結果に驚く（そして友達に自慢する）
+#### Step-by-step Flow (Visual)
+1. **🤏 Touch** - Lightly place finger on trackpad
+2. **⚖️ Place** - Gently place object to weigh  
+3. **📊 Measure** - Force Touch sensors calculate weight
+4. **🎉 Marvel** - Be amazed by results (and brag to friends)
 
-**技術説明ボックス：**
+**Technical Explanation Box:**
 *"Using Force Touch pressure sensors + a bit of clever math = your new favorite party trick"*
 
 ---
 
-### ❓ **4. "The Fine Print" - FAQ（でも楽しく）**
-**見出し：** *"Questions You're Probably Thinking"*
+### ❓ **4. "The Fine Print" - FAQ (But Fun)**
+**Heading:** *"Questions You're Probably Thinking"*
 
-#### アコーディオン形式のQ&A
+#### Accordion-style Q&A
 - **Q: "Does this actually work?"**  
   A: *"Surprisingly well! Good enough to impress friends, accurate enough for small measurements."*
 
@@ -62,10 +62,10 @@
 
 ---
 
-### 🚀 **5. "Get Started" - ダウンロード**
-**見出し：** *"Ready to Turn Your Trackpad Into a Scale?"*
+### 🚀 **5. "Get Started" - Download**
+**Heading:** *"Ready to Turn Your Trackpad Into a Scale?"*
 
-#### 2つの選択肢（カード形式）
+#### 2 Options (Card Format)
 **🍺 Easy Mode (Homebrew)**
 ```bash
 brew install --cask krishkrosh/apps/trackweight
@@ -76,9 +76,9 @@ brew install --cask krishkrosh/apps/trackweight
 - GitHub repository link
 - *"For those who like to see under the hood"*
 
-#### 🎁 **ボーナスセクション**
+#### 🎁 **Bonus Section**
 **"Share Your Weirdest Measurements!"**
-- GitHub Issues へのリンク
+- Link to GitHub Issues
 - *"Found something fun to weigh? Tell us about it!"*
 
 ---
@@ -90,26 +90,26 @@ brew install --cask krishkrosh/apps/trackweight
 
 ---
 
-## 🎨 **デザインの遊び心要素**
+## 🎨 **Playful Design Elements**
 
-### 📱 **マイクロインタラクション**
-- トラックパッドのイラストが実際に「押される」アニメーション
-- 重さの数値がカウントアップするエフェクト
-- ホバー時に「おっ！」という驚きのアイコンが出現
+### 📱 **Micro-interactions**
+- Trackpad illustration that actually "presses" on hover
+- Weight numbers with count-up animation effects
+- "Wow!" surprise icons appear on hover
 
-### 🎵 **トーンとボイス**
-- フレンドリーで親しみやすい
-- 技術的すぎず、でも仕組みはちゃんと説明
-- 「こんなことできるんだ！」という驚きと楽しさを演出
+### 🎵 **Tone & Voice**
+- Friendly and approachable
+- Not too technical, but explains the mechanism properly
+- "Look what's possible!" surprise and joy
 
-### 🌈 **視覚的要素**
-- MacBookのイラスト中心
-- 淡いグラデーション（Apple風）
-- 重さを表現するバランスのアイコン
-- Force Touchの「圧力」を表現する波紋エフェクト
+### 🌈 **Visual Elements**
+- MacBook illustrations as centerpiece
+- Subtle gradients (Apple-style)
+- Balance/weight icons
+- Force Touch "pressure" ripple effects
 
 ---
 
-## 💬 **KrishKroshさんへの提案文言**
+## 💬 **Pitch to KrishKrosh**
 
 *"This structure balances the technical innovation with everyday relatability - just like your other projects! The playful tone matches the 'experimental but useful' vibe of TrackWeight, while still providing all the practical information users need."*

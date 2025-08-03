@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "deepl-translator": {
+      "command": "node",
+      "args": ["/Users/matsumurayuu/deepl-mcp-server/src/index.mjs"],
+      "env": {
+        "DEEPL_API_KEY": "2eb7bf5b-85fe-4fc4-b96d-284aba124e36:fx"
+      }
+    }
+  }
+}

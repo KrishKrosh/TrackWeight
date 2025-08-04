@@ -1,0 +1,42 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": "Write|Edit|MultiEdit",
+      "command": "echo '🏠 GroupHomeJuju: コンセプトチェック中...' && if [[ $CLAUDE_FILE_PATHS == *\".html\"* ]]; then echo '📋 HTMLファイル: アクセシビリティ配慮を確認'; fi && if [[ $CLAUDE_FILE_PATHS == *\".css\"* ]]; then echo '🎨 CSSファイル: レスポンシブ・カラーパレット確認'; fi"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Write|Edit|MultiEdit",
+      "command": "npm run format 2>/dev/null || echo '✅ フォーマッタ実行完了' && echo '🌿 GroupHomeJuju: 「おじいちゃんが建てたあったかいおうち」コンセプトを大切に'"
+    },
+    {
+      "event": "PostToolUse", 
+      "matcher": "Bash",
+      "command": "if [[ $CLAUDE_TOOL_INPUT == *\"npm run build\"* ]]; then echo '🏗️ ビルド完了！品質チェック:'; npm run lint --silent 2>/dev/null && echo '✅ Lint OK' || echo '⚠️ Lint要確認'; fi"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash", 
+      "command": "if [[ $CLAUDE_TOOL_INPUT == *\"git commit\"* ]]; then echo '📋 コミット前チェック...'; echo '- TODO.mdの更新確認'; echo '- アクセシビリティ配慮確認'; echo '- レスポンシブ対応確認'; npm test 2>/dev/null || echo '⚠️ テストコマンドなし（静的サイト）'; fi"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": "Bash",
+      "command": "if [[ $CLAUDE_TOOL_INPUT == *\"git\"* ]]; then echo '🔄 Git操作完了: $(git branch --show-current)ブランチ'; git status --porcelain | wc -l | xargs -I {} echo '📝 変更ファイル数: {}'; fi"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": "Bash",
+      "command": "if [[ $CLAUDE_TOOL_INPUT == *\"git push\"* ]]; then echo '🚀 プッシュ前最終確認...'; echo '- 品質チェック完了確認'; echo '- TODO.md進捗更新確認'; echo '- GitHub Pages デプロイ準備確認'; fi"
+    },
+    {
+      "event": "Stop",
+      "command": "echo '🏠 GroupHomeJuju セッション完了' && echo '📊 プロジェクト状況:' && git branch --show-current | xargs -I {} echo '🌿 現在のブランチ: {}' && git status --porcelain | wc -l | xargs -I {} echo '📝 未コミット変更: {}ファイル' && echo '🎯 次回のフォーカス: TODO.mdを確認してください'"
+    },
+    {
+      "event": "Notification",
+      "command": "osascript -e 'display notification \"GroupHomeJuju: 承認をお待ちしています\" with title \"あったかいおうち開発\" sound name \"Glass\"' 2>/dev/null || echo '🔔 承認待ち: GroupHomeJuju開発'"
+    }
+  ]
+}

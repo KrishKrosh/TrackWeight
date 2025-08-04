@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "post-tool-use": {
+      "tools": ["Write", "Edit", "MultiEdit"],
+      "command": "#!/bin/bash\nfor file_path in $CLAUDE_FILE_PATHS; do\n  filename=$(basename \"$file_path\")\n  current_date=$(date +\"%Y-%m-%d\")\n  \n  # TODO.md に修正確認タスクを追記\n  if [ -f \"src/docs/TODO.md\" ]; then\n    echo \"- [ ] 修正確認: $filename\" >> src/docs/TODO.md\n  fi\n  \n  # CHANGELOG.md に変更ログを追記\n  if [ -f \"CHANGELOG.md\" ]; then\n    echo \"$current_date: Modified $filename\" >> CHANGELOG.md\n  fi\ndone"
+    },
+    "stop": {
+      "command": "say '作業が完了しました'"
+    }
+  }
+}

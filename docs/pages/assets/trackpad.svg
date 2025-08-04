@@ -4,6 +4,11 @@
       <stop stop-color="#EAEAEA"/>
       <stop offset="1" stop-color="#D7D7D7"/>
     </linearGradient>
+    <filter id="hand-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
   </defs>
+  
+  <!-- トラックパッド本体 -->
   <rect x="1" y="1" width="238" height="148" rx="12" ry="12" fill="url(#trackpad-gradient)" stroke="#C4C4C4" stroke-width="2"/>
 </svg>

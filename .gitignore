@@ -27,3 +27,5 @@ local_build/
 # AI Models
 GEMINI.md
 CLAUDE.md
+.gemini/
+.claude/

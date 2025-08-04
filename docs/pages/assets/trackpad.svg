@@ -1,0 +1,9 @@
+<svg width="240" height="150" viewBox="0 0 240 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="trackpad-gradient" x1="120" y1="0" x2="120" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAEAEA"/>
+      <stop offset="1" stop-color="#D7D7D7"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="238" height="148" rx="12" ry="12" fill="url(#trackpad-gradient)" stroke="#C4C4C4" stroke-width="2"/>
+</svg>

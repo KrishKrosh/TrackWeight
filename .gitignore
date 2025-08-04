@@ -1,31 +1,3 @@
-# Mac
-.DS_Store
 
-# Xcode
-xcuserdata/
-*.xcuserstate
-
-# Swift Package Manager
-Packages.resolved
-.swiftpm/
-.build/
-
-# Framework
-*.framework/
-*.xcframework/
-*.zip
-build/
-
-# AI
-.claude/
-
-.env
-.secrets
-
-local_build/
-
-# AI Models
-GEMINI.md
-CLAUDE.md
-.gemini/
-.claude/
+# Node.js
+node_modules/

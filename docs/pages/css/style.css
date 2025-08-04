@@ -91,18 +91,14 @@ section h3 {
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
 }
 
-#hero .trackpad-container::after {
-    content: '';
+#hero .hand-svg {
     position: absolute;
-    width: 40px; /* Finger size */
-    height: 40px;
-    background-color: rgba(255, 149, 0, 0.7); /* Finger color */
-    border-radius: 50%;
+    width: 100px; /* Adjust size as needed */
+    height: 100px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     animation: press-and-hold 3s ease-in-out infinite;
-    box-shadow: 0 0 15px rgba(255, 149, 0, 0.8);
 }
 
 @keyframes press-and-hold {

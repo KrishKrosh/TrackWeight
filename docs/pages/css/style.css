@@ -91,26 +91,7 @@ section h3 {
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
 }
 
-#hero .hand-svg {
-    position: absolute;
-    width: 100px; /* Adjust size as needed */
-    height: 100px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: press-and-hold 3s ease-in-out infinite;
-}
 
-@keyframes press-and-hold {
-    0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.8;
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(0.85);
-        opacity: 1;
-    }
-}
 
 .cta-button {
     display: inline-block;

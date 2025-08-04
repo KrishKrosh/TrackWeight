@@ -8,13 +8,21 @@
 </head>
 <body>
     <header>
-        <h1>TrackWeight</h1>
-        <p>指を置く。そして測る。</p>
+        <div class="header-title-group">
+            <h1>TrackWeight</h1>
+            <p>指を置く。そして測る。</p>
+        </div>
+        <div class="header-buttons">
+            <a href="https://github.com/krishkrosh/TrackWeight/releases" class="button primary-button">ダウンロード</a>
+            <a href="https://github.com/krishkrosh/TrackWeight" class="button secondary-button">GitHub</a>
+        </div>
     </header>
 
     <main>
         <section id="hero">
             <div class="trackpad-container">
+                <div id="weight-indicator"></div>
+                <div id="weight-display">0.00 g</div>
                 <img src="assets/trackpad.svg" alt="MacBook Trackpad" class="trackpad-svg">
             </div>
             <a href="https://github.com/krishkrosh/TrackWeight/releases" class="cta-button">今すぐダウンロードして、笑いは後で</a>
@@ -113,6 +121,7 @@
             <h3>指の時代が来た。</h3>
             <p>もっとバカげたバージョンも可能だった（自重した）。</p>
             <p>オープンな実験 — このナンセンスに参加しよう！</p>
+            <a href="https://github.com/krishkrosh/TrackWeight/releases" class="cta-button">今すぐダウンロードして、笑いは後で</a>
         </section>
     </main>
 
@@ -131,6 +140,7 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

@@ -11,8 +11,8 @@
   --text-secondary: #8E8E93;
   
   /* Gradients */
-  --gradient-hero: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-teal) 100%);
-  --gradient-accent: linear-gradient(45deg, var(--accent-orange) 0%, #FFAD33 100%);
+  --gradient-hero: linear-gradient(135deg, #007AFF 0%, #32D2C7 100%);
+  --gradient-accent: linear-gradient(45deg, #FF9500 0%, #FFAD33 100%);
 }
 
 body {
@@ -25,21 +25,67 @@ body {
 
 header {
     background-color: #fff;
-    padding: 40px 20px;
-    text-align: center;
+    padding: 20px 40px; /* 上下のパディングを減らし、左右を増やす */
+    display: flex; /* Flexboxを有効にする */
+    justify-content: space-between; /* 要素を両端に配置 */
+    align-items: center; /* 垂直方向の中央揃え */
     border-bottom: 1px solid #eee;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 header h1 {
-    font-size: 3em;
+    font-size: 2.5em; /* フォントサイズを調整 */
     color: var(--primary-blue);
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* マージンを調整 */
 }
 
 header p {
-    font-size: 1.2em;
+    font-size: 1em; /* フォントサイズを調整 */
     color: var(--text-secondary);
+    margin-bottom: 0; /* マージンを調整 */
+}
+
+.header-title-group {
+    text-align: left; /* テキストを左寄せ */
+}
+
+.header-buttons {
+    margin-top: 0; /* マージンを調整 */
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* ボタン間のスペース */
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 10px;
+}
+
+.primary-button {
+    background: var(--gradient-accent);
+    color: #fff;
+}
+
+.primary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(255,149,0,0.3);
+}
+
+.secondary-button {
+    background-color: #fff;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.secondary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 122, 255, 0.1);
 }
 
 main {
@@ -89,6 +135,36 @@ section h3 {
     width: 100%;
     height: 100%;
     filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+    user-select: none; /* Prevent image selection */
+    -webkit-user-drag: none; /* Prevent image dragging */
+    pointer-events: none; /* Allow clicks to pass through */
+}
+
+#weight-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(0, 122, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 10; /* Add z-index */
+}
+
+#weight-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 2em;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    pointer-events: none; /* Allow clicks to pass through */
+    opacity: 0;
+    z-index: 11; /* Add z-index, higher than indicator */
 }
 
 

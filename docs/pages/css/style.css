@@ -78,12 +78,42 @@ section h3 {
     color: #fff;
 }
 
-#hero img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+#hero .trackpad-container {
+    position: relative;
+    width: 300px; /* Adjust size as needed */
+    height: 180px;
+    margin: 0 auto 30px auto;
+}
+
+#hero .trackpad-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+}
+
+#hero .trackpad-container::after {
+    content: '';
+    position: absolute;
+    width: 40px; /* Finger size */
+    height: 40px;
+    background-color: rgba(255, 149, 0, 0.7); /* Finger color */
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: press-and-hold 3s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(255, 149, 0, 0.8);
+}
+
+@keyframes press-and-hold {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(0.85);
+        opacity: 1;
+    }
 }
 
 .cta-button {

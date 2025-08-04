@@ -1,63 +1,301 @@
+:root {
+  /* Primary Colors */
+  --primary-blue: #007AFF;
+  --primary-teal: #32D2C7;
+  --accent-orange: #FF9500;
+  
+  /* Neutrals */
+  --bg-primary: #FAFAFA;
+  --bg-surface: #F5F5F7;
+  --text-primary: #1D1D1F;
+  --text-secondary: #8E8E93;
+  
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-teal) 100%);
+  --gradient-accent: linear-gradient(45deg, var(--accent-orange) 0%, #FFAD33 100%);
+}
+
 body {
-    font-family: sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
-    background-color: #f8f8fa;
-    color: #333;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
 }
 
 header {
     background-color: #fff;
-    padding: 20px;
+    padding: 40px 20px;
     text-align: center;
     border-bottom: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+header h1 {
+    font-size: 3em;
+    color: var(--primary-blue);
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2em;
+    color: var(--text-secondary);
 }
 
 main {
-    max-width: 800px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px 20px;
+}
+
+section {
+    margin-bottom: 60px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+}
+
+section h2 {
+    font-size: 2.2em;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+section h3 {
+    font-size: 1.8em;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #hero {
     text-align: center;
-    margin-bottom: 40px;
+    background: var(--gradient-hero);
+    padding: 60px 20px;
+    border-radius: 12px;
+    color: #fff;
 }
 
 #hero img {
     max-width: 100%;
+    height: auto;
     border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
 
 .cta-button {
     display: inline-block;
-    background-color: #007aff;
+    background: var(--gradient-accent);
     color: #fff;
-    padding: 15px 30px;
+    padding: 18px 35px;
     text-decoration: none;
-    border-radius: 5px;
-    margin-top: 20px;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-#features ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: space-around;
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255,149,0,0.3);
 }
 
-#features li {
+#what-did-you-say, #we-know-it-sounds-ridiculous, #how-it-works-playful, #science-schmience, #try-it-now-laugh-later, #make-weight-great-again {
     text-align: center;
 }
 
-.icon {
-    font-size: 2em;
-    display: block;
+#what-did-you-say p, #we-know-it-sounds-ridiculous p, #we-know-it-sounds-ridiculous ul, #how-it-works-playful p, #science-schmience ul, #try-it-now-laugh-later ul, #make-weight-great-again p {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+#we-know-it-sounds-ridiculous ul, #science-schmience ul, #try-it-now-laugh-later ul {
+    list-style: none;
+    padding: 0;
+}
+
+#we-know-it-sounds-ridiculous li, #science-schmience li, #try-it-now-laugh-later li {
     margin-bottom: 10px;
+}
+
+/* Feature cards are no longer used in the new outline, but keeping the styles in case they are reused for download options */
+.feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--bg-surface);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: var(--primary-blue);
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: var(--text-secondary);
+}
+
+/* Old #how-it-works styles are removed as the content structure changed */
+
+#tested-by-finger-lifters ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+#tested-by-finger-lifters li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+#faq-weird .accordion-item {
+    margin-bottom: 15px;
+    border: 1px solid var(--bg-surface);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#faq-weird .accordion-header {
+    background-color: var(--bg-surface);
+    color: var(--primary-blue);
+    padding: 18px 25px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#faq-weird .accordion-header:hover {
+    background-color: #e9e9eb;
+}
+
+#faq-weird .accordion-content {
+    padding: 0 25px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+#faq-weird .accordion-content p {
+    padding-bottom: 15px;
+    color: var(--text-secondary);
+}
+
+#faq-weird .accordion-item.active .accordion-content {
+    max-height: 200px; /* Adjust as needed */
+    padding-top: 15px;
+}
+
+.download-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.download-options .card {
+    text-align: left;
+}
+
+.download-options pre {
+    background-color: #2c2c2e;
+    color: #32d2c7;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.download-options code {
+    font-family: "SF Mono", monospace;
+}
+
+.download-options a {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+.download-options a:hover {
+    text-decoration: underline;
 }
 
 footer {
     text-align: center;
-    padding: 20px;
-    margin-top: 40px;
+    padding: 40px 20px;
+    margin-top: 60px;
     border-top: 1px solid #eee;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+footer .disclaimer {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #8e8e93;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.social-links {
+    margin-top: 20px;
+}
+
+.social-links a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.social-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+
+    header p {
+        font-size: 1em;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    section h2 {
+        font-size: 1.8em;
+    }
+
+    .cta-button {
+        padding: 15px 25px;
+        font-size: 1em;
+    }
+
+    /* Removed old #how-it-works li styles */
 }

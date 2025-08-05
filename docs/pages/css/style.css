@@ -181,6 +181,7 @@ section h3 {
     pointer-events: none; /* Allow clicks to pass through */
     opacity: 0;
     z-index: 11; /* Add z-index, higher than indicator */
+    white-space: nowrap; /* Prevent line breaks */
 }
 
 

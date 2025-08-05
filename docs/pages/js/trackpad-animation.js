@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentWeight = 0;
         const updateWeight = () => {
             currentWeight += Math.random() * 5; // 重量の増加をシミュレート
-            if (currentWeight > 1000) currentWeight = 1000; // 上限を1000gに設定
+            if (currentWeight > 500) currentWeight = 500; // 上限を500gに設定
             weightDisplay.textContent = `${currentWeight.toFixed(2)} g`;
             animationFrameId = requestAnimationFrame(updateWeight);
         };

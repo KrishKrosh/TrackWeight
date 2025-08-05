@@ -20,10 +20,37 @@
 
     <main>
         <section id="hero">
+            <div id="hero-overlay"></div>
             <div class="trackpad-container">
                 <div id="weight-indicator"></div>
                 <div id="weight-display">0.00 g</div>
-                <img src="assets/trackpad.svg" alt="MacBook Trackpad" class="trackpad-svg">
+                <!-- Inlined SVG to ensure animation plays correctly -->
+                <svg viewBox="0 0 240 150" fill="none" xmlns="http://www.w3.org/2000/svg" class="trackpad-svg" aria-label="MacBook Trackpad with click and hold animation">
+                  <defs>
+                    <linearGradient id="trackpad-gradient" x1="120" y1="0" x2="120" y2="150" gradientUnits="userSpaceOnUse">
+                      <stop stop-color="#EAEAEA"/>
+                      <stop offset="1" stop-color="#D7D7D7"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="1" y="1" width="238" height="148" rx="12" ry="12" fill="url(#trackpad-gradient)" stroke="#C4C4C4" stroke-width="2"/>
+                  <!-- A simple circle animation to indicate interactivity -->
+                  <circle cx="120" cy="75" r="0" fill="#007AFF" fill-opacity="0">
+                    <animate 
+                      attributeName="r" 
+                      values="0; 20; 20; 0" 
+                      dur="2.5s" 
+                      repeatCount="indefinite"
+                      keyTimes="0; 0.4; 0.8; 1"
+                    />
+                    <animate 
+                      attributeName="fill-opacity" 
+                      values="0; 0.7; 0.7; 0" 
+                      dur="2.5s" 
+                      repeatCount="indefinite"
+                      keyTimes="0; 0.4; 0.8; 1"
+                    />
+                  </circle>
+                </svg>
             </div>
             <a href="https://github.com/krishkrosh/TrackWeight/releases" class="cta-button">Download now, laugh later</a>
         </section>
@@ -152,6 +179,7 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/trackpad-animation.js"></script>
+    <script src="js/accordion.js"></script>
 </body>
 </html>

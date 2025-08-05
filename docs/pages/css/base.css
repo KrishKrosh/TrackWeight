@@ -1,0 +1,68 @@
+:root {
+  /* Primary Colors */
+  --primary-blue: #007AFF;
+  --primary-teal: #32D2C7;
+  --accent-orange: #FF9500;
+  
+  /* Neutrals */
+  --bg-primary: #FAFAFA;
+  --bg-surface: #F5F5F7;
+  --text-primary: #1D1D1F;
+  --text-secondary: #8E8E93;
+  
+  /* Gradients */
+  --gradient-hero: linear-gradient(135deg, #007AFF 0%, #32D2C7 100%);
+  --gradient-accent: linear-gradient(45deg, #FF9500 0%, #FFAD33 100%);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+section {
+    margin-bottom: 60px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+}
+
+section h2 {
+    font-size: 2.2em;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+section h3 {
+    font-size: 1.8em;
+    color: var(--primary-blue);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#what-did-you-say p, #we-know-it-sounds-ridiculous p, #we-know-it-sounds-ridiculous ul, #how-it-works-playful p, #science-schmience ul, #try-it-now-laugh-later ul, #make-weight-great-again p {
+    font-size: 1.1em;
+    color: var(--text-primary);
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+#we-know-it-sounds-ridiculous ul, #science-schmience ul, #try-it-now-laugh-later ul {
+    list-style: none;
+    padding: 0;
+}
+
+#we-know-it-sounds-ridiculous li, #science-schmience li, #try-it-now-laugh-later li {
+    margin-bottom: 10px;
+}

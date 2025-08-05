@@ -4,11 +4,39 @@
       <stop stop-color="#EAEAEA"/>
       <stop offset="1" stop-color="#D7D7D7"/>
     </linearGradient>
-    <filter id="hand-shadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.1"/>
-    </filter>
   </defs>
   
   <!-- トラックパッド本体 -->
   <rect x="1" y="1" width="238" height="148" rx="12" ry="12" fill="url(#trackpad-gradient)" stroke="#C4C4C4" stroke-width="2"/>
+
+  <!-- アニメーション用のグループ -->
+  <g style="user-select: none;">
+    <!-- 下向きの矢印 -->
+    <path d="M120 65 L114 57 L117 57 L117 45 L123 45 L123 57 L126 57 Z" fill="#007AFF">
+      <animateTransform 
+        attributeName="transform"
+        type="translate"
+        values="0 0; 0 5; 0 0"
+        dur="1.8s"
+        repeatCount="indefinite"
+        keyTimes="0; 0.5; 1"
+        calcMode="spline" 
+        keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+      />
+    </path>
+
+    <!-- テキスト -->
+    <text x="120" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#007AFF" text-anchor="middle">
+      Click & Hold
+      <animate 
+        attributeName="opacity"
+        values="1; 0.3; 1"
+        dur="1.8s"
+        repeatCount="indefinite"
+        keyTimes="0; 0.5; 1"
+        calcMode="spline" 
+        keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+      />
+    </text>
+  </g>
 </svg>

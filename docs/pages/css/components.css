@@ -1,0 +1,168 @@
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 10px;
+}
+
+.primary-button {
+    background: var(--gradient-accent);
+    color: #fff;
+}
+
+.primary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(255,149,0,0.3);
+}
+
+.secondary-button {
+    background-color: #fff;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.secondary-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 122, 255, 0.1);
+}
+
+.cta-button {
+    display: inline-block;
+    background: var(--gradient-accent);
+    color: #fff;
+    padding: 18px 35px;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255,149,0,0.3);
+}
+
+/* Feature cards for 'How It Works' section and other grid layouts */
+.feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--bg-surface);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    color: var(--primary-blue);
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.card p {
+    color: var(--text-secondary);
+}
+
+#faq-weird .accordion-item {
+    margin-bottom: 15px;
+    border: 1px solid var(--bg-surface);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#faq-weird .accordion-header {
+    background-color: var(--bg-surface);
+    color: var(--primary-blue);
+    padding: 18px 25px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#faq-weird .accordion-header:hover {
+    background-color: #e9e9eb;
+}
+
+#faq-weird .accordion-content {
+    padding: 0 25px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+#faq-weird .accordion-content p {
+    padding-bottom: 15px;
+    color: var(--text-secondary);
+}
+
+#faq-weird .accordion-item.active .accordion-content {
+    max-height: 200px; /* Adjust as needed */
+    padding-top: 15px;
+}
+
+.download-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.download-options .card {
+    text-align: left;
+}
+
+.download-options pre {
+    background-color: #2c2c2e;
+    color: #32d2c7;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.download-options code {
+    font-family: "SF Mono", monospace;
+}
+
+.download-options a {
+    color: var(--primary-blue);
+    text-decoration: none;
+}
+
+.download-options a:hover {
+    text-decoration: underline;
+}
+
+.social-links {
+    margin-top: 20px;
+}
+
+.social-links a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+.social-links a:hover {
+    text-decoration: underline;
+}

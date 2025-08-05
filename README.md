@@ -1,5 +1,117 @@
 # TrackWeight
 
+[English](#english-version)
+
+**MacBookのトラックパッドを、精密なデジタルスケールに変える**
+
+[TrackWeight](https://x.com/KrishRShah/status/1947186835811193330)は、モダンなMacBookのトラックパッドに内蔵されている感圧タッチセンサーを活用し、トラックパッドを正確なスケールに変えるmacOSアプリケーションです。
+
+https://github.com/user-attachments/assets/7eaf9e0b-3dec-4829-b868-f54a8fd53a84
+
+### 使用方法
+
+1. スケールを開きます。
+2. トラックパッドに指を置きます。
+3. 指を触れたまま、測定したい物体をトラックパッドに乗せます。
+4. 指の接触を保ちつつ、できるだけトラックパッドに圧力をかけないようにしてください。これが物体の重さです。
+
+## 仕組み
+
+TrackWeightは、[中村拓人](https://github.com/Kyome22)氏による[Open Multi-Touch Supportライブラリ](https://github.com/krishkrosh/OpenMultitouchSupport)のカスタムフォークを利用して、macOS上のすべてのマウスおよびトラックパッドイベントへのプライベートアクセスを取得します。このライブラリは、通常のアプリケーションではアクセスできない圧力測定値を含む詳細なタッチデータを提供します。
+
+重要なのは、トラックパッドの圧力イベントが、トラックパッド表面で静電容量が検出されたときにのみ生成されるという点です。つまり、指（または他の導電性物体）がトラックパッドに接触している必要があります。この条件が満たされると、トラックパッドの感圧タッチセンサーが正確な圧力測定値を提供し、それを校正して重量測定値に変換することができます。
+
+## 要件
+
+- **macOS 13.0+** (Ventura以降)
+- **感圧タッチトラックパッドを搭載したMacBook** (2015年以降のMacBook Pro, 2016年以降のMacBook)
+- **App Sandboxの無効化** (低レベルのトラックパッドアクセスに必要)
+- **Xcode 16.0+** および **Swift 6.0+** (開発用)
+
+## インストール
+
+### オプション1: DMGをダウンロード (推奨)
+
+1. [リリースページ](https://github.com/krishkrosh/TrackWeight/releases)にアクセスします。
+2. 最新のTrackWeight DMGファイルをダウンロードします。
+3. DMGを開き、TrackWeight.appをアプリケーションフォルダにドラッグします。
+4. アプリケーションを実行します（未署名のビルドの場合、システム環境設定 > セキュリティとプライバシーで許可が必要な場合があります）。
+
+### オプション2: Homebrew
+```bash
+brew install --cask krishkrosh/apps/trackweight --force
+```
+
+### オプション3: ソースからビルド
+
+1. このリポジトリをクローンします。
+2. Xcodeで`TrackWeight.xcodeproj`を開きます。
+3. プロジェクト設定でApp Sandboxを無効にします（トラックパッドアクセスに必要）。
+4. アプリケーションをビルドして実行します。
+
+ビルドパイプラインの設定に関する詳細は、[.github/workflows/README.md](.github/workflows/README.md)を参照してください。
+
+## 開発
+
+### Webサイト開発
+
+このプロジェクトには、`docs/pages`にあるドキュメントサイトが含まれています。サイトをローカルで開発・プレビューするには、以下の手順に従ってください。
+
+1.  **依存関係のインストール**:
+    ```bash
+    npm install
+    ```
+
+2.  **開発サーバーの起動**:
+    ```bash
+    npm start
+    ```
+    これにより、`http://localhost:8080`でライブサーバーが起動し、ファイルの変更が自動的にブラウザに反映されます。
+
+### キャリブレーションプロセス
+
+重量の計算は、以下の方法で検証されています：
+1. MacBookのトラックパッドを、従来のデジタルスケールの上に直接置きます。
+2. トラックパッドに指を触れたまま、様々な既知の重りを乗せます。
+3. 圧力測定値を基準スケールの測定値と比較し、キャリブレーションします。
+4. 異なる重量範囲で一貫した精度を確保します。
+
+結果として、MultitouchSupportから得られるデータはすでにグラム単位であることが判明しました！
+
+## 制限事項
+
+- **指の接触が必要**: トラックパッドは静電容量（指の接触）を検出したときにのみ圧力測定値を提供するため、接触を維持せずに直接物体の重量を測定することはできません。
+- **表面接触**: 測定する物体は、必要な指の接触を妨げないように配置する必要があります。
+- **金属製の物体**: 金属製の物体は指の接触として検出される可能性があるため、正確な測定値を得るには、物体とトラックパッドの間に紙や布などを挟む必要がある場合があります。
+
+## 技術詳細
+
+このアプリケーションは、以下の技術を使用して構築されています：
+- **SwiftUI**: ユーザーインターフェース
+- **Combine**: リアクティブなデータフロー
+- **Open Multi-Touch Supportライブラリ**: 低レベルのトラックパッドアクセス
+
+### Open Multi-Touch Supportライブラリ
+
+このプロジェクトは、**中村拓人** ([@Kyome22](https://github.com/Kyome22))氏と[Open Multi-Touch Supportライブラリ](https://github.com/krishkrosh/OpenMultitouchSupport)の素晴らしい成果に大きく依存しています。このライブラリは以下を提供します：
+
+- macOSトラックパッドのグローバルなマルチタッチイベントへのアクセス
+- 位置、圧力、角度、密度を含む詳細なタッチデータ
+- タッチイベントストリームに対するスレッドセーフなasync/awaitのサポート
+- タッチ状態の追跡と包括的なセンサーデータ
+
+## ライセンス
+
+このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
+
+## 免責事項
+
+このアプリケーションは、実験および教育目的のものです。精度の確保には努めていますが、TrackWeightは、精度が不可欠な重要な測定や商用アプリケーションには使用しないでください。重要な用途の場合は、必ず校正されたスケールで測定値を確認してください。
+
+---
+
+# English Version
+
 **Turn your MacBook's trackpad into a precise digital weighing scale**
 
 [TrackWeight](
@@ -49,6 +161,23 @@ brew install --cask krishkrosh/apps/trackweight --force
 4. Build and run the application
 
 For more information about setting up the build pipeline, see [.github/workflows/README.md](.github/workflows/README.md).
+
+## Development
+
+### Website Development
+
+This project includes a documentation site located in `docs/pages`. To develop and preview the site locally, follow these steps:
+
+1.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
+
+2.  **Start the Development Server**:
+    ```bash
+    npm start
+    ```
+    This will start a live server at `http://localhost:8080` and automatically reload the browser when files are changed.
 
 ### Calibration Process
 

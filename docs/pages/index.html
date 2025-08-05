@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackWeight - MacBook to digital scale</title>.
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="header-title-group">
+            <h1>TrackWeight</h1>
+            <p>Place a finger on it. And measure. </p>
+        </div>
+        <div class="header-buttons">
+            <a href="https://github.com/krishkrosh/TrackWeight/releases" class="button primary-button">Download</a>
+            <a href="https://github.com/krishkrosh/TrackWeight" class="button secondary-button">GitHub</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div id="hero-overlay"></div>
+            <div class="trackpad-container">
+                <div id="weight-indicator"></div>
+                <div id="weight-display">0.00 g</div>
+                <!-- Inlined SVG to ensure animation plays correctly -->
+                <svg width="240" height="150" viewBox="0 0 240 150" fill="none" xmlns="http://www.w3.org/2000/svg" class="trackpad-svg">
+  <defs>
+    <linearGradient id="trackpad-gradient" x1="120" y1="0" x2="120" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAEAEA"/>
+      <stop offset="1" stop-color="#D7D7D7"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- トラックパッド本体 -->
+  <rect x="1" y="1" width="238" height="148" rx="12" ry="12" fill="url(#trackpad-gradient)" stroke="#C4C4C4" stroke-width="2"/>
+
+  <!-- アニメーション用のグループ -->
+  <g style="user-select: none;">
+    <!-- 下向きの矢印 -->
+    <path d="M120 65 L114 57 L117 57 L117 45 L123 45 L123 57 L126 57 Z" fill="#007AFF">
+      <animateTransform 
+        attributeName="transform"
+        type="translate"
+        values="0 0; 0 5; 0 0"
+        dur="1.8s"
+        repeatCount="indefinite"
+        keyTimes="0; 0.5; 1"
+        calcMode="spline" 
+        keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+      />
+    </path>
+
+    <!-- テキスト -->
+    <text x="120" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="600" fill="#007AFF" text-anchor="middle">
+      Click & Hold
+      <animate 
+        attributeName="opacity"
+        values="1; 0.3; 1"
+        dur="1.8s"
+        repeatCount="indefinite"
+        keyTimes="0; 0.5; 1"
+        calcMode="spline" 
+        keySplines="0.42 0 0.58 1; 0.42 0 0.58 1"
+      />
+    </text>
+  </g>
+</svg>
+            </div>
+            <a href="https://github.com/krishkrosh/TrackWeight/releases" class="cta-button">Download now, laugh later</a>
+        </section>
+
+        <section id="what-did-you-say">
+            <h2>What did you just say? </h2>
+            <h3>"You said you can weigh... just by putting your finger on the trackpad?!" </h3>
+            <p>My brain bugs me in the first 3 seconds. </p>
+            <p>By defying gravity (and expectations) with animated GIFs. </p>
+        </section>
+
+        <section id="we-know-it-sounds-ridiculous">
+            <h2>Did we say it's ridiculous? We know it is. </h2>
+            <p>But it really works. Seriously. </p>
+            <ul>
+                <li>Unlocking the hidden potential of the trackpad</li>
+                <li>The Secret Life of Pressure Sensors</li>
+                <li>Apple probably didn't see this coming (maybe)</li>.
+            </ul>
+        </section>
+
+        <section id="how-it-works-playful">
+            <h2>How It Works in 3 Simple Steps</h2>
+            <p>It's not wizardry, it's just clever engineering. Here’s the secret sauce:</p>
+            <div class="feature-cards">
+                <div class="card">
+                    <h3>1. Touch & Place</h3>
+                    <p>Lightly place your finger on the trackpad, then gently place a small object on it. This activates the Force Touch sensors.</p>
+                </div>
+                <div class="card">
+                    <h3>2. Measure</h3>
+                    <p>Our app reads the raw pressure data from the sensors and instantly converts it into grams. (Turns out, the data is already in grams!)</p>
+                </div>
+                <div class="card">
+                    <h3>3. Marvel</h3>
+                    <p>Be amazed by the result! You've just weighed something with your laptop. Go ahead, brag to your friends. You've earned it.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tested-by-finger-lifters">
+            <h2>Tested by finger-lifters</h2>
+            <p>(and a bit of an exaggerated testimonial)</p>
+            <ul>
+                <li>"My thumbs are now perfectly fine and macho." </li>
+                <li>"Finger day is the new leg day." </li>
+            </ul>
+        </section>
+
+        <section id="science-schmience">
+            <h2>Science? Schmience! </h2>
+            <p>Don't think too hard. Just put your finger on it. </p>
+            <ul>
+                <li>Physicists in sleep mode</li>.
+                <li>Einstein would surely approve (hypothetical)</li>.
+            </ul>
+        </section>
+
+        <section id="try-it-now-laugh-later">
+            <h2>Try it now, laugh later</h2>.
+            <h3>Download it now. Wonder later. </h3>
+            <ul>
+                <li>"What?" reaction after use</li>.
+                <li>Strange and useful experience</li>.
+            </ul>
+            <div class="download-options">
+                <div class="card">
+                    <h3>🍺 Easy Mode (Homebrew)</h3>
+                    <pre><code>brew install --cask krishkrosh/apps/trackweight</code></pre>
+                    <p>One command, endless possibilities. </p>
+                </div>
+                <div class="card">
+                    <h3>🛠️ hacker mode (build from source)</h3>
+                    <p><a href="https://github.com/krishkrosh/TrackWeight">GitHub repository</a></p>
+                    <p>For those who want to see what's inside. </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq-weird">
+            <h2>Frequently asked (odd) questions</h2>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header">Q: Can you measure cat paw pads too? </button>
+                    <div class="accordion-content">
+                        <p>A: Unfortunately, cat paw pads cannot be measured because they do not detect capacitance. But your finger can! </p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Q: My fingers feel heavier. Should I be worried? </button>
+                    <div class="accordion-content">
+                        <p>A: That's proof that TrackWeight has worked its magic. No need to worry! Think of it as a new muscle ache. </p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header">Q: Does it work inside a black hole? </button>
+                    <div class="accordion-content">
+                        <p>A: I have not tried it, but if you do, please let us know the results! </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="make-weight-great-again">
+            <h2>Make Weight Great Again</h2>
+            <h3>The time has come for fingers. </h3>
+            <p>A more ridiculous version was possible (and dead weight). </p>
+            <p>Open experimentation - join us in this nonsense! </p>
+            <a href="https://github.com/krishkrosh/TrackWeight/releases" class="cta-button">Download now, laugh later</a>!
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 TrackWeight. all rights reserved.</p>
+        <p class="disclaimer">
+            This is a wildly experimental project.
+            There are no medical claims or guarantees of logic.
+            You are responsible for your well-trained fingers and abs.
+            If you faint with joy, we will quietly cheer you on.
+            There is no guarantee of laughter, but it will stick in someone's funny bone.
+        </p>
+        <div class="social-links">
+            <a href="https://github.com/krishkrosh/TrackWeight" target="_blank">Get ⭐ on GitHub</a>
+            <a href="https://twitter.com/KrishRShah" target="_blank">Follow @KrishRShah</a>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="js/trackpad-animation.js"></script>
+    <script src="js/accordion.js"></script>
+</body>
+</html>
